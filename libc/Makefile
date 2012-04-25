@@ -12,4 +12,4 @@ libc.compiled:${source_obj} ${source_h}
 
 clean:
 	@echo 正在删除libc文件夹.o文件
-	@${RM} *.compiled *.o 
+	@${RM} *.o  *.compiled

@@ -1,27 +1,19 @@
-/*
- *  File name: 		_main.c
+/**
+ *  \file	_main.c
+ *  \brief      è¯¦ç»†å¯çœ‹_main.h
  *
- *  Created on: 	ÉÏÎç11:33:22 2012-4-20 2012 
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-
+ *  \author 	fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version: 	1.0\n
+ *  compiler:GCC\n
+ *  \date       ä¸Šåˆ11:33:22 2012-4-20
  */
-#include "../sysdev/interrupt.h"
-#include "../sysdev/systick.h"
-#include "../sysdev/touch.h"
-#include "../sysdev/tft.h"
-#include "../sysdev/usart.h"
-#include "../libc/led.h"
-
+#include "_main.h"
 //---------------------------------------------------------
 /*
- Function Name:
+ * \fn          void _main(void)
  ver 1.0
- first creat:			ÉÏÎç11:33:38  2012-4-20
+ first creat:			ï¿½ï¿½ï¿½ï¿½11:33:38  2012-4-20
  final alternative:
  Parameters:
  In: 		None.
@@ -33,15 +25,16 @@
 
 // Function body
 void
-_main()
+_main(void)
 {
   systick_init();
-  usart_init();
+  usart1_init();
   tft_init();
   touch_init();
   interrupt_open();
   LED_Init();
-  systick_enable(1);//systickÖĞ¶ÏºÍ¶¨Ê±Æ÷¶¼¿ª
+  systick_enable(1);//systickå®šæ—¶å™¨å¯åŠ¨
+  _fputc('a');
 }
 
 // End Function Name

@@ -1,14 +1,15 @@
-/*
- *  File name: 		interrupt.h
+/**
+ *  \file     interrupt.h
+ *  \brief    å¯¹ä¸­æ–­è¿›è¡Œåˆå§‹åŒ–\n
  *
- *  Created on: 	ÉÏÎç11:39:24 2012-4-20 2012 
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-    
+ *  \detail   1.ä½¿èƒ½systickä¸­æ–­ï¼Œä½†è¿™ä¸ªæ—¶å€™systickè¿˜æœªæœ‰å¼€å§‹å·¥ä½œ
+ *
+ *
+ *  \author     fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version:   1.0\n
+ *  compiler:GCC\n
+ *  \date      Apr 24, 2012 2:39:58 PM
  */
 
 #ifndef INTERRUPT_H_
@@ -16,17 +17,24 @@
 
 #include "../stm32f103/STM32F10x/stm32f10x.h"
 
-/*
-select_int_or_tickenable:1,´ú±í¶¨Ê±Æ÷¿ª
-*/
+
 #define systick_enable_int(tickenable)        SysTick->CTRL |= (tickenable << 1)
 /*
-select_int_or_tickenable:1,´ú±í¶¨Ê±Æ÷¹Ø
+select_int_or_tickenable:1,ï¿½ï¿½?Ê±ï¿½ï¿½ï¿½ï¿½
 */
 #define systick_disable_int(tickenable)       SysTick->CTRL &= (~(tickenable << 1))
 
+/** @addtogroup å‡½æ•°
+ * @{
+ */
+/** @addtogroup sysdev
+ * @{
+ * @brief sysdevæ–‡ä»¶å¤¹çš„å‡½æ•°
+ */
 extern void interrupt_open();
 
+/**@}*/
+/**@}*/
 
 
 #endif /* INTERRUPT_H_ */
