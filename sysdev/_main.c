@@ -34,7 +34,6 @@ _main(void)
   interrupt_open();
   LED_Init();
   systick_enable(1);//systick定时器启动
-  _fputc('a');
 }
 
 // End Function Name

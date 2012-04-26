@@ -5,7 +5,7 @@ source_obj := $(patsubst %.c,%.o,$(source_src))
 source_h := $(wildcard *.h)
 
 libc.compiled:${source_obj} ${source_h}
-	@cp *.o ../${output_dir} -rf
+	-@cp -rf ${source_obj} ../${output_dir} 
 	@${RM} $@
 	@touch $@
 	

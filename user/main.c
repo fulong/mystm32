@@ -10,10 +10,11 @@
  *  Comment:
 
  */
+#include "../sysdev/usart.h"
 int
 main(void)
 {
   while (1)
-    ;
+    _fputc('a');
   return 0;
 }

@@ -204,7 +204,7 @@ void
 usart1_init(void)
 {
   USART_DeInit(USART1);
-  usart_io_init();
+//  usart_io_init();
   INIT_usart1.USART_BaudRate = 115200;
   INIT_usart1.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   INIT_usart1.USART_StopBits = USART_STOP_BIT_1_0;

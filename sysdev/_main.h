@@ -21,12 +21,8 @@
 #include "../sysdev/touch.h"
 #include "../sysdev/tft.h"
 #include "../sysdev/usart.h"
-#include "../libc/led.h"
+#include "../sysdev/led.h"
 
-/*
- * \fn          void _main(void)
-*/
-extern void _main(void);/**<\brief     初始化串口，systick，开中断，初始化屏幕等等*/
 
 
 #endif /* MAIN_H_ */

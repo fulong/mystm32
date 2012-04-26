@@ -12,8 +12,8 @@
  *  \date      Apr 24, 2012 2:39:58 PM
  */
 #include "interrupt.h"
-#include "../libc/led.h"
-#include "../libc/debug.h"
+#include "led.h"
+#include "debug.h"
 
 
 /**
