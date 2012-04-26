@@ -204,12 +204,12 @@ void
 usart1_init(void)
 {
   USART_DeInit(USART1);
-//  usart_io_init();
+  usart_io_init();
   INIT_usart1.USART_BaudRate = 115200;
   INIT_usart1.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   INIT_usart1.USART_StopBits = USART_STOP_BIT_1_0;
   INIT_usart1.USART_WordLength = USART_DATA_BIT_8;
-  INIT_usart1.USART_Mode = EN_USART_TX;
+  INIT_usart1.USART_Mode = EN_USART_TX+EN_USART_RX;
   INIT_usart1.USART_Parity = 0;
   USART_Init(USART1,&INIT_usart1);
 }

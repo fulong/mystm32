@@ -111,7 +111,7 @@ Disassembly of section .text:
  8000206:	429a      	cmp	r2, r3
  8000208:	d3f9      	bcc.n	80001fe <FillZerobss>
  800020a:	f000 f85d 	bl	80002c8 <SystemInit>
- 800020e:	f000 f813 	bl	8000238 <_main>
+ 800020e:	f000 f83f 	bl	8000290 <_main>
  8000212:	f000 f853 	bl	80002bc <main>
  8000216:	4770      	bx	lr
  8000218:	20000000 	andcs	r0, r0, r0
@@ -124,72 +124,72 @@ Disassembly of section .text:
  800022c:	e7fe      	b.n	800022c <ADC1_2_IRQHandler>
 
 0800022e <SysTick_Handler>:
- 800022e:	f000 b821 	b.w	8000274 <systick_Handle>
+ 800022e:	f000 b80b 	b.w	8000248 <systick_Handle>
 	...
 
 08000234 <touch_init>:
  8000234:	4770      	bx	lr
  8000236:	bf00      	nop
 
-08000238 <_main>:
- 8000238:	b508      	push	{r3, lr}
- 800023a:	f000 f8f7 	bl	800042c <systick_init>
- 800023e:	f000 f9bd 	bl	80005bc <usart1_init>
- 8000242:	f000 f839 	bl	80002b8 <tft_init>
- 8000246:	f7ff fff5 	bl	8000234 <touch_init>
- 800024a:	f000 f80b 	bl	8000264 <interrupt_open>
- 800024e:	f000 f8c3 	bl	80003d8 <LED_Init>
- 8000252:	4b03      	ldr	r3, [pc, #12]	; (8000260 <_main+0x28>)
- 8000254:	6818      	ldr	r0, [r3, #0]
- 8000256:	f040 0201 	orr.w	r2, r0, #1
- 800025a:	601a      	str	r2, [r3, #0]
- 800025c:	bd08      	pop	{r3, pc}
- 800025e:	bf00      	nop
- 8000260:	e000e010 	and	lr, r0, r0, lsl r0
+08000238 <interrupt_open>:
+ 8000238:	4b02      	ldr	r3, [pc, #8]	; (8000244 <interrupt_open+0xc>)
+ 800023a:	6818      	ldr	r0, [r3, #0]
+ 800023c:	f040 0202 	orr.w	r2, r0, #2
+ 8000240:	601a      	str	r2, [r3, #0]
+ 8000242:	4770      	bx	lr
+ 8000244:	e000e010 	and	lr, r0, r0, lsl r0
 
-08000264 <interrupt_open>:
- 8000264:	4b02      	ldr	r3, [pc, #8]	; (8000270 <interrupt_open+0xc>)
- 8000266:	6818      	ldr	r0, [r3, #0]
- 8000268:	f040 0202 	orr.w	r2, r0, #2
- 800026c:	601a      	str	r2, [r3, #0]
- 800026e:	4770      	bx	lr
- 8000270:	e000e010 	and	lr, r0, r0, lsl r0
+08000248 <systick_Handle>:
+ 8000248:	4b0e      	ldr	r3, [pc, #56]	; (8000284 <systick_Handle+0x3c>)
+ 800024a:	781a      	ldrb	r2, [r3, #0]
+ 800024c:	2a63      	cmp	r2, #99	; 0x63
+ 800024e:	d90b      	bls.n	8000268 <systick_Handle+0x20>
+ 8000250:	7819      	ldrb	r1, [r3, #0]
+ 8000252:	1c48      	adds	r0, r1, #1
+ 8000254:	7018      	strb	r0, [r3, #0]
+ 8000256:	f893 c000 	ldrb.w	ip, [r3]
+ 800025a:	f1bc 0fc8 	cmp.w	ip, #200	; 0xc8
+ 800025e:	d00a      	beq.n	8000276 <systick_Handle+0x2e>
+ 8000260:	4b09      	ldr	r3, [pc, #36]	; (8000288 <systick_Handle+0x40>)
+ 8000262:	2001      	movs	r0, #1
+ 8000264:	6018      	str	r0, [r3, #0]
+ 8000266:	4770      	bx	lr
+ 8000268:	781a      	ldrb	r2, [r3, #0]
+ 800026a:	2000      	movs	r0, #0
+ 800026c:	1c51      	adds	r1, r2, #1
+ 800026e:	7019      	strb	r1, [r3, #0]
+ 8000270:	4b05      	ldr	r3, [pc, #20]	; (8000288 <systick_Handle+0x40>)
+ 8000272:	6018      	str	r0, [r3, #0]
+ 8000274:	4770      	bx	lr
+ 8000276:	2200      	movs	r2, #0
+ 8000278:	701a      	strb	r2, [r3, #0]
+ 800027a:	4b03      	ldr	r3, [pc, #12]	; (8000288 <systick_Handle+0x40>)
+ 800027c:	2001      	movs	r0, #1
+ 800027e:	6018      	str	r0, [r3, #0]
+ 8000280:	4770      	bx	lr
+ 8000282:	bf00      	nop
+ 8000284:	20000014 	andcs	r0, r0, r4, lsl r0
+ 8000288:	42228188 	eormi	r8, r2, #136, 2	; 0x22
 
-08000274 <systick_Handle>:
- 8000274:	4b0e      	ldr	r3, [pc, #56]	; (80002b0 <systick_Handle+0x3c>)
- 8000276:	781a      	ldrb	r2, [r3, #0]
- 8000278:	2a63      	cmp	r2, #99	; 0x63
- 800027a:	d90b      	bls.n	8000294 <systick_Handle+0x20>
- 800027c:	7819      	ldrb	r1, [r3, #0]
- 800027e:	1c48      	adds	r0, r1, #1
- 8000280:	7018      	strb	r0, [r3, #0]
- 8000282:	f893 c000 	ldrb.w	ip, [r3]
- 8000286:	f1bc 0fc8 	cmp.w	ip, #200	; 0xc8
- 800028a:	d00a      	beq.n	80002a2 <systick_Handle+0x2e>
- 800028c:	4b09      	ldr	r3, [pc, #36]	; (80002b4 <systick_Handle+0x40>)
- 800028e:	2001      	movs	r0, #1
- 8000290:	6018      	str	r0, [r3, #0]
- 8000292:	4770      	bx	lr
- 8000294:	781a      	ldrb	r2, [r3, #0]
- 8000296:	2000      	movs	r0, #0
- 8000298:	1c51      	adds	r1, r2, #1
- 800029a:	7019      	strb	r1, [r3, #0]
- 800029c:	4b05      	ldr	r3, [pc, #20]	; (80002b4 <systick_Handle+0x40>)
- 800029e:	6018      	str	r0, [r3, #0]
- 80002a0:	4770      	bx	lr
- 80002a2:	2200      	movs	r2, #0
- 80002a4:	701a      	strb	r2, [r3, #0]
- 80002a6:	4b03      	ldr	r3, [pc, #12]	; (80002b4 <systick_Handle+0x40>)
- 80002a8:	2001      	movs	r0, #1
- 80002aa:	6018      	str	r0, [r3, #0]
- 80002ac:	4770      	bx	lr
- 80002ae:	bf00      	nop
- 80002b0:	20000014 	andcs	r0, r0, r4, lsl r0
- 80002b4:	42228188 	eormi	r8, r2, #136, 2	; 0x22
+0800028c <tft_init>:
+ 800028c:	4770      	bx	lr
+ 800028e:	bf00      	nop
 
-080002b8 <tft_init>:
- 80002b8:	4770      	bx	lr
- 80002ba:	bf00      	nop
+08000290 <_main>:
+ 8000290:	b508      	push	{r3, lr}
+ 8000292:	f000 f8cb 	bl	800042c <systick_init>
+ 8000296:	f000 f9b1 	bl	80005fc <usart1_init>
+ 800029a:	f7ff fff7 	bl	800028c <tft_init>
+ 800029e:	f7ff ffc9 	bl	8000234 <touch_init>
+ 80002a2:	f7ff ffc9 	bl	8000238 <interrupt_open>
+ 80002a6:	f000 f897 	bl	80003d8 <LED_Init>
+ 80002aa:	4b03      	ldr	r3, [pc, #12]	; (80002b8 <_main+0x28>)
+ 80002ac:	6818      	ldr	r0, [r3, #0]
+ 80002ae:	f040 0201 	orr.w	r2, r0, #1
+ 80002b2:	601a      	str	r2, [r3, #0]
+ 80002b4:	bd08      	pop	{r3, pc}
+ 80002b6:	bf00      	nop
+ 80002b8:	e000e010 	and	lr, r0, r0, lsl r0
 
 080002bc <main>:
  80002bc:	b508      	push	{r3, lr}
@@ -374,39 +374,39 @@ Disassembly of section .text:
  8000468:	bd10      	pop	{r4, pc}
  800046a:	2101      	movs	r1, #1
  800046c:	f44f 1080 	mov.w	r0, #1048576	; 0x100000
- 8000470:	f000 f8cc 	bl	800060c <RCC_APB1PeriphResetCmd>
+ 8000470:	f000 f8ee 	bl	8000650 <RCC_APB1PeriphResetCmd>
  8000474:	f44f 1080 	mov.w	r0, #1048576	; 0x100000
  8000478:	2100      	movs	r1, #0
  800047a:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 800047e:	f000 b8c5 	b.w	800060c <RCC_APB1PeriphResetCmd>
+ 800047e:	f000 b8e7 	b.w	8000650 <RCC_APB1PeriphResetCmd>
  8000482:	2101      	movs	r1, #1
  8000484:	f44f 4080 	mov.w	r0, #16384	; 0x4000
- 8000488:	f000 f8b2 	bl	80005f0 <RCC_APB2PeriphResetCmd>
+ 8000488:	f000 f8d4 	bl	8000634 <RCC_APB2PeriphResetCmd>
  800048c:	f44f 4080 	mov.w	r0, #16384	; 0x4000
  8000490:	2100      	movs	r1, #0
  8000492:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 8000496:	f000 b8ab 	b.w	80005f0 <RCC_APB2PeriphResetCmd>
+ 8000496:	f000 b8cd 	b.w	8000634 <RCC_APB2PeriphResetCmd>
  800049a:	2101      	movs	r1, #1
  800049c:	f44f 3000 	mov.w	r0, #131072	; 0x20000
- 80004a0:	f000 f8b4 	bl	800060c <RCC_APB1PeriphResetCmd>
+ 80004a0:	f000 f8d6 	bl	8000650 <RCC_APB1PeriphResetCmd>
  80004a4:	f44f 3000 	mov.w	r0, #131072	; 0x20000
  80004a8:	2100      	movs	r1, #0
  80004aa:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 80004ae:	f000 b8ad 	b.w	800060c <RCC_APB1PeriphResetCmd>
+ 80004ae:	f000 b8cf 	b.w	8000650 <RCC_APB1PeriphResetCmd>
  80004b2:	2101      	movs	r1, #1
  80004b4:	f44f 2080 	mov.w	r0, #262144	; 0x40000
- 80004b8:	f000 f8a8 	bl	800060c <RCC_APB1PeriphResetCmd>
+ 80004b8:	f000 f8ca 	bl	8000650 <RCC_APB1PeriphResetCmd>
  80004bc:	f44f 2080 	mov.w	r0, #262144	; 0x40000
  80004c0:	2100      	movs	r1, #0
  80004c2:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 80004c6:	f000 b8a1 	b.w	800060c <RCC_APB1PeriphResetCmd>
+ 80004c6:	f000 b8c3 	b.w	8000650 <RCC_APB1PeriphResetCmd>
  80004ca:	2101      	movs	r1, #1
  80004cc:	f44f 2000 	mov.w	r0, #524288	; 0x80000
- 80004d0:	f000 f89c 	bl	800060c <RCC_APB1PeriphResetCmd>
+ 80004d0:	f000 f8be 	bl	8000650 <RCC_APB1PeriphResetCmd>
  80004d4:	f44f 2000 	mov.w	r0, #524288	; 0x80000
  80004d8:	2100      	movs	r1, #0
  80004da:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 80004de:	f000 b895 	b.w	800060c <RCC_APB1PeriphResetCmd>
+ 80004de:	f000 b8b7 	b.w	8000650 <RCC_APB1PeriphResetCmd>
  80004e2:	bf00      	nop
  80004e4:	40013800 	andmi	r3, r1, r0, lsl #16
  80004e8:	40004400 	andmi	r4, r0, r0, lsl #8
@@ -447,7 +447,7 @@ Disassembly of section .text:
  8000550:	ea40 0e0c 	orr.w	lr, r0, ip
  8000554:	f8a4 e014 	strh.w	lr, [r4, #20]
  8000558:	a801      	add	r0, sp, #4
- 800055a:	f000 f865 	bl	8000628 <RCC_GetClocksFreq>
+ 800055a:	f000 f887 	bl	800066c <RCC_GetClocksFreq>
  800055e:	490f      	ldr	r1, [pc, #60]	; (800059c <USART_Init+0xa4>)
  8000560:	682b      	ldr	r3, [r5, #0]
  8000562:	428c      	cmp	r4, r1
@@ -486,130 +486,157 @@ Disassembly of section .text:
  80005b6:	bf00      	nop
  80005b8:	40013800 	andmi	r3, r1, r0, lsl #16
 
-080005bc <usart1_init>:
- 80005bc:	b510      	push	{r4, lr}
- 80005be:	4c0a      	ldr	r4, [pc, #40]	; (80005e8 <usart1_init+0x2c>)
- 80005c0:	4620      	mov	r0, r4
- 80005c2:	f7ff ff41 	bl	8000448 <USART_DeInit>
- 80005c6:	4b09      	ldr	r3, [pc, #36]	; (80005ec <usart1_init+0x30>)
- 80005c8:	4620      	mov	r0, r4
- 80005ca:	f44f 34e1 	mov.w	r4, #115200	; 0x1c200
- 80005ce:	2200      	movs	r2, #0
- 80005d0:	601c      	str	r4, [r3, #0]
- 80005d2:	4619      	mov	r1, r3
- 80005d4:	2408      	movs	r4, #8
- 80005d6:	819a      	strh	r2, [r3, #12]
- 80005d8:	80da      	strh	r2, [r3, #6]
- 80005da:	809a      	strh	r2, [r3, #4]
- 80005dc:	815c      	strh	r4, [r3, #10]
- 80005de:	811a      	strh	r2, [r3, #8]
- 80005e0:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
- 80005e4:	f7ff bf88 	b.w	80004f8 <USART_Init>
- 80005e8:	40013800 	andmi	r3, r1, r0, lsl #16
- 80005ec:	20000018 	andcs	r0, r0, r8, lsl r0
+080005bc <usart_io_init>:
+ 80005bc:	4b0d      	ldr	r3, [pc, #52]	; (80005f4 <usart_io_init+0x38>)
+ 80005be:	4a0e      	ldr	r2, [pc, #56]	; (80005f8 <usart_io_init+0x3c>)
+ 80005c0:	6999      	ldr	r1, [r3, #24]
+ 80005c2:	f041 0004 	orr.w	r0, r1, #4
+ 80005c6:	6198      	str	r0, [r3, #24]
+ 80005c8:	6999      	ldr	r1, [r3, #24]
+ 80005ca:	f441 4080 	orr.w	r0, r1, #16384	; 0x4000
+ 80005ce:	6198      	str	r0, [r3, #24]
+ 80005d0:	6851      	ldr	r1, [r2, #4]
+ 80005d2:	f421 607f 	bic.w	r0, r1, #4080	; 0xff0
+ 80005d6:	6050      	str	r0, [r2, #4]
+ 80005d8:	6851      	ldr	r1, [r2, #4]
+ 80005da:	f441 600b 	orr.w	r0, r1, #2224	; 0x8b0
+ 80005de:	6050      	str	r0, [r2, #4]
+ 80005e0:	68da      	ldr	r2, [r3, #12]
+ 80005e2:	f442 4180 	orr.w	r1, r2, #16384	; 0x4000
+ 80005e6:	60d9      	str	r1, [r3, #12]
+ 80005e8:	68d8      	ldr	r0, [r3, #12]
+ 80005ea:	f420 4280 	bic.w	r2, r0, #16384	; 0x4000
+ 80005ee:	60da      	str	r2, [r3, #12]
+ 80005f0:	4770      	bx	lr
+ 80005f2:	bf00      	nop
+ 80005f4:	40021000 	andmi	r1, r2, r0
+ 80005f8:	40010800 	andmi	r0, r1, r0, lsl #16
 
-080005f0 <RCC_APB2PeriphResetCmd>:
- 80005f0:	b929      	cbnz	r1, 80005fe <RCC_APB2PeriphResetCmd+0xe>
- 80005f2:	4b05      	ldr	r3, [pc, #20]	; (8000608 <RCC_APB2PeriphResetCmd+0x18>)
- 80005f4:	68da      	ldr	r2, [r3, #12]
- 80005f6:	ea22 0100 	bic.w	r1, r2, r0
- 80005fa:	60d9      	str	r1, [r3, #12]
- 80005fc:	4770      	bx	lr
- 80005fe:	4b02      	ldr	r3, [pc, #8]	; (8000608 <RCC_APB2PeriphResetCmd+0x18>)
- 8000600:	68da      	ldr	r2, [r3, #12]
- 8000602:	4310      	orrs	r0, r2
- 8000604:	60d8      	str	r0, [r3, #12]
- 8000606:	4770      	bx	lr
- 8000608:	40021000 	andmi	r1, r2, r0
+080005fc <usart1_init>:
+ 80005fc:	b510      	push	{r4, lr}
+ 80005fe:	4c0b      	ldr	r4, [pc, #44]	; (800062c <usart1_init+0x30>)
+ 8000600:	4620      	mov	r0, r4
+ 8000602:	f7ff ff21 	bl	8000448 <USART_DeInit>
+ 8000606:	f7ff ffd9 	bl	80005bc <usart_io_init>
+ 800060a:	4b09      	ldr	r3, [pc, #36]	; (8000630 <usart1_init+0x34>)
+ 800060c:	4620      	mov	r0, r4
+ 800060e:	f44f 34e1 	mov.w	r4, #115200	; 0x1c200
+ 8000612:	2200      	movs	r2, #0
+ 8000614:	601c      	str	r4, [r3, #0]
+ 8000616:	4619      	mov	r1, r3
+ 8000618:	240c      	movs	r4, #12
+ 800061a:	819a      	strh	r2, [r3, #12]
+ 800061c:	80da      	strh	r2, [r3, #6]
+ 800061e:	809a      	strh	r2, [r3, #4]
+ 8000620:	815c      	strh	r4, [r3, #10]
+ 8000622:	811a      	strh	r2, [r3, #8]
+ 8000624:	e8bd 4010 	ldmia.w	sp!, {r4, lr}
+ 8000628:	f7ff bf66 	b.w	80004f8 <USART_Init>
+ 800062c:	40013800 	andmi	r3, r1, r0, lsl #16
+ 8000630:	20000018 	andcs	r0, r0, r8, lsl r0
 
-0800060c <RCC_APB1PeriphResetCmd>:
- 800060c:	b929      	cbnz	r1, 800061a <RCC_APB1PeriphResetCmd+0xe>
- 800060e:	4b05      	ldr	r3, [pc, #20]	; (8000624 <RCC_APB1PeriphResetCmd+0x18>)
- 8000610:	691a      	ldr	r2, [r3, #16]
- 8000612:	ea22 0100 	bic.w	r1, r2, r0
- 8000616:	6119      	str	r1, [r3, #16]
- 8000618:	4770      	bx	lr
- 800061a:	4b02      	ldr	r3, [pc, #8]	; (8000624 <RCC_APB1PeriphResetCmd+0x18>)
- 800061c:	691a      	ldr	r2, [r3, #16]
- 800061e:	4310      	orrs	r0, r2
- 8000620:	6118      	str	r0, [r3, #16]
- 8000622:	4770      	bx	lr
- 8000624:	40021000 	andmi	r1, r2, r0
+08000634 <RCC_APB2PeriphResetCmd>:
+ 8000634:	b929      	cbnz	r1, 8000642 <RCC_APB2PeriphResetCmd+0xe>
+ 8000636:	4b05      	ldr	r3, [pc, #20]	; (800064c <RCC_APB2PeriphResetCmd+0x18>)
+ 8000638:	68da      	ldr	r2, [r3, #12]
+ 800063a:	ea22 0100 	bic.w	r1, r2, r0
+ 800063e:	60d9      	str	r1, [r3, #12]
+ 8000640:	4770      	bx	lr
+ 8000642:	4b02      	ldr	r3, [pc, #8]	; (800064c <RCC_APB2PeriphResetCmd+0x18>)
+ 8000644:	68da      	ldr	r2, [r3, #12]
+ 8000646:	4310      	orrs	r0, r2
+ 8000648:	60d8      	str	r0, [r3, #12]
+ 800064a:	4770      	bx	lr
+ 800064c:	40021000 	andmi	r1, r2, r0
 
-08000628 <RCC_GetClocksFreq>:
- 8000628:	4b21      	ldr	r3, [pc, #132]	; (80006b0 <RCC_GetClocksFreq+0x88>)
- 800062a:	b410      	push	{r4}
- 800062c:	685a      	ldr	r2, [r3, #4]
- 800062e:	f002 020c 	and.w	r2, r2, #12
- 8000632:	2a04      	cmp	r2, #4
- 8000634:	d001      	beq.n	800063a <RCC_GetClocksFreq+0x12>
- 8000636:	2a08      	cmp	r2, #8
- 8000638:	d023      	beq.n	8000682 <RCC_GetClocksFreq+0x5a>
- 800063a:	491e      	ldr	r1, [pc, #120]	; (80006b4 <RCC_GetClocksFreq+0x8c>)
- 800063c:	6001      	str	r1, [r0, #0]
- 800063e:	4a1c      	ldr	r2, [pc, #112]	; (80006b0 <RCC_GetClocksFreq+0x88>)
- 8000640:	4b1d      	ldr	r3, [pc, #116]	; (80006b8 <RCC_GetClocksFreq+0x90>)
- 8000642:	6854      	ldr	r4, [r2, #4]
- 8000644:	f3c4 1c03 	ubfx	ip, r4, #4, #4
- 8000648:	f813 400c 	ldrb.w	r4, [r3, ip]
- 800064c:	40e1      	lsrs	r1, r4
- 800064e:	6041      	str	r1, [r0, #4]
- 8000650:	6854      	ldr	r4, [r2, #4]
- 8000652:	f3c4 2c02 	ubfx	ip, r4, #8, #3
- 8000656:	f813 400c 	ldrb.w	r4, [r3, ip]
- 800065a:	fa31 f404 	lsrs.w	r4, r1, r4
- 800065e:	6084      	str	r4, [r0, #8]
- 8000660:	6854      	ldr	r4, [r2, #4]
- 8000662:	f3c4 24c2 	ubfx	r4, r4, #11, #3
- 8000666:	5d1c      	ldrb	r4, [r3, r4]
- 8000668:	40e1      	lsrs	r1, r4
- 800066a:	60c1      	str	r1, [r0, #12]
- 800066c:	6852      	ldr	r2, [r2, #4]
- 800066e:	f3c2 3281 	ubfx	r2, r2, #14, #2
- 8000672:	189b      	adds	r3, r3, r2
- 8000674:	f893 c010 	ldrb.w	ip, [r3, #16]
- 8000678:	fbb1 f1fc 	udiv	r1, r1, ip
- 800067c:	6101      	str	r1, [r0, #16]
- 800067e:	bc10      	pop	{r4}
- 8000680:	4770      	bx	lr
- 8000682:	685a      	ldr	r2, [r3, #4]
- 8000684:	685c      	ldr	r4, [r3, #4]
- 8000686:	f3c2 4183 	ubfx	r1, r2, #18, #4
- 800068a:	3102      	adds	r1, #2
- 800068c:	f414 3f80 	tst.w	r4, #65536	; 0x10000
- 8000690:	d008      	beq.n	80006a4 <RCC_GetClocksFreq+0x7c>
- 8000692:	685b      	ldr	r3, [r3, #4]
- 8000694:	f413 3f00 	tst.w	r3, #131072	; 0x20000
- 8000698:	d104      	bne.n	80006a4 <RCC_GetClocksFreq+0x7c>
- 800069a:	4a06      	ldr	r2, [pc, #24]	; (80006b4 <RCC_GetClocksFreq+0x8c>)
- 800069c:	fb02 f101 	mul.w	r1, r2, r1
- 80006a0:	6001      	str	r1, [r0, #0]
- 80006a2:	e7cc      	b.n	800063e <RCC_GetClocksFreq+0x16>
- 80006a4:	4c05      	ldr	r4, [pc, #20]	; (80006bc <RCC_GetClocksFreq+0x94>)
- 80006a6:	fb04 f101 	mul.w	r1, r4, r1
- 80006aa:	6001      	str	r1, [r0, #0]
- 80006ac:	e7c7      	b.n	800063e <RCC_GetClocksFreq+0x16>
- 80006ae:	bf00      	nop
- 80006b0:	40021000 	andmi	r1, r2, r0
- 80006b4:	007a1200 	rsbseq	r1, sl, r0, lsl #4
- 80006b8:	20000000 	andcs	r0, r0, r0
- 80006bc:	003d0900 	eorseq	r0, sp, r0, lsl #18
+08000650 <RCC_APB1PeriphResetCmd>:
+ 8000650:	b929      	cbnz	r1, 800065e <RCC_APB1PeriphResetCmd+0xe>
+ 8000652:	4b05      	ldr	r3, [pc, #20]	; (8000668 <RCC_APB1PeriphResetCmd+0x18>)
+ 8000654:	691a      	ldr	r2, [r3, #16]
+ 8000656:	ea22 0100 	bic.w	r1, r2, r0
+ 800065a:	6119      	str	r1, [r3, #16]
+ 800065c:	4770      	bx	lr
+ 800065e:	4b02      	ldr	r3, [pc, #8]	; (8000668 <RCC_APB1PeriphResetCmd+0x18>)
+ 8000660:	691a      	ldr	r2, [r3, #16]
+ 8000662:	4310      	orrs	r0, r2
+ 8000664:	6118      	str	r0, [r3, #16]
+ 8000666:	4770      	bx	lr
+ 8000668:	40021000 	andmi	r1, r2, r0
+
+0800066c <RCC_GetClocksFreq>:
+ 800066c:	4b21      	ldr	r3, [pc, #132]	; (80006f4 <RCC_GetClocksFreq+0x88>)
+ 800066e:	b410      	push	{r4}
+ 8000670:	685a      	ldr	r2, [r3, #4]
+ 8000672:	f002 020c 	and.w	r2, r2, #12
+ 8000676:	2a04      	cmp	r2, #4
+ 8000678:	d001      	beq.n	800067e <RCC_GetClocksFreq+0x12>
+ 800067a:	2a08      	cmp	r2, #8
+ 800067c:	d023      	beq.n	80006c6 <RCC_GetClocksFreq+0x5a>
+ 800067e:	491e      	ldr	r1, [pc, #120]	; (80006f8 <RCC_GetClocksFreq+0x8c>)
+ 8000680:	6001      	str	r1, [r0, #0]
+ 8000682:	4a1c      	ldr	r2, [pc, #112]	; (80006f4 <RCC_GetClocksFreq+0x88>)
+ 8000684:	4b1d      	ldr	r3, [pc, #116]	; (80006fc <RCC_GetClocksFreq+0x90>)
+ 8000686:	6854      	ldr	r4, [r2, #4]
+ 8000688:	f3c4 1c03 	ubfx	ip, r4, #4, #4
+ 800068c:	f813 400c 	ldrb.w	r4, [r3, ip]
+ 8000690:	40e1      	lsrs	r1, r4
+ 8000692:	6041      	str	r1, [r0, #4]
+ 8000694:	6854      	ldr	r4, [r2, #4]
+ 8000696:	f3c4 2c02 	ubfx	ip, r4, #8, #3
+ 800069a:	f813 400c 	ldrb.w	r4, [r3, ip]
+ 800069e:	fa31 f404 	lsrs.w	r4, r1, r4
+ 80006a2:	6084      	str	r4, [r0, #8]
+ 80006a4:	6854      	ldr	r4, [r2, #4]
+ 80006a6:	f3c4 24c2 	ubfx	r4, r4, #11, #3
+ 80006aa:	5d1c      	ldrb	r4, [r3, r4]
+ 80006ac:	40e1      	lsrs	r1, r4
+ 80006ae:	60c1      	str	r1, [r0, #12]
+ 80006b0:	6852      	ldr	r2, [r2, #4]
+ 80006b2:	f3c2 3281 	ubfx	r2, r2, #14, #2
+ 80006b6:	189b      	adds	r3, r3, r2
+ 80006b8:	f893 c010 	ldrb.w	ip, [r3, #16]
+ 80006bc:	fbb1 f1fc 	udiv	r1, r1, ip
+ 80006c0:	6101      	str	r1, [r0, #16]
+ 80006c2:	bc10      	pop	{r4}
+ 80006c4:	4770      	bx	lr
+ 80006c6:	685a      	ldr	r2, [r3, #4]
+ 80006c8:	685c      	ldr	r4, [r3, #4]
+ 80006ca:	f3c2 4183 	ubfx	r1, r2, #18, #4
+ 80006ce:	3102      	adds	r1, #2
+ 80006d0:	f414 3f80 	tst.w	r4, #65536	; 0x10000
+ 80006d4:	d008      	beq.n	80006e8 <RCC_GetClocksFreq+0x7c>
+ 80006d6:	685b      	ldr	r3, [r3, #4]
+ 80006d8:	f413 3f00 	tst.w	r3, #131072	; 0x20000
+ 80006dc:	d104      	bne.n	80006e8 <RCC_GetClocksFreq+0x7c>
+ 80006de:	4a06      	ldr	r2, [pc, #24]	; (80006f8 <RCC_GetClocksFreq+0x8c>)
+ 80006e0:	fb02 f101 	mul.w	r1, r2, r1
+ 80006e4:	6001      	str	r1, [r0, #0]
+ 80006e6:	e7cc      	b.n	8000682 <RCC_GetClocksFreq+0x16>
+ 80006e8:	4c05      	ldr	r4, [pc, #20]	; (8000700 <RCC_GetClocksFreq+0x94>)
+ 80006ea:	fb04 f101 	mul.w	r1, r4, r1
+ 80006ee:	6001      	str	r1, [r0, #0]
+ 80006f0:	e7c7      	b.n	8000682 <RCC_GetClocksFreq+0x16>
+ 80006f2:	bf00      	nop
+ 80006f4:	40021000 	andmi	r1, r2, r0
+ 80006f8:	007a1200 	rsbseq	r1, sl, r0, lsl #4
+ 80006fc:	20000000 	andcs	r0, r0, r0
+ 8000700:	003d0900 	eorseq	r0, sp, r0, lsl #18
 
 Disassembly of section .ARM.attributes:
 
-080006c0 <.ARM.attributes>:
- 80006c0:	00002c41 	andeq	r2, r0, r1, asr #24
- 80006c4:	61656100 	cmnvs	r5, r0, lsl #2
- 80006c8:	01006962 	tsteq	r0, r2, ror #18
- 80006cc:	00000022 	andeq	r0, r0, r2, lsr #32
- 80006d0:	726f4305 	rsbvc	r4, pc, #335544320	; 0x14000000
- 80006d4:	2d786574 	cfldr64cs	mvdx6, [r8, #-464]!	; 0xfffffe30
- 80006d8:	0600334d 	streq	r3, [r0], -sp, asr #6
- 80006dc:	094d070a 	stmdbeq	sp, {r1, r3, r8, r9, sl}^
- 80006e0:	14041202 	strne	r1, [r4], #-514	; 0xfffffdfe
- 80006e4:	17011501 	strne	r1, [r1, -r1, lsl #10]
- 80006e8:	1a011803 	bne	80466fc <_sidata+0x45dcf>
- 80006ec:	Address 0x080006ec is out of bounds.
+08000704 <.ARM.attributes>:
+ 8000704:	00002c41 	andeq	r2, r0, r1, asr #24
+ 8000708:	61656100 	cmnvs	r5, r0, lsl #2
+ 800070c:	01006962 	tsteq	r0, r2, ror #18
+ 8000710:	00000022 	andeq	r0, r0, r2, lsr #32
+ 8000714:	726f4305 	rsbvc	r4, pc, #335544320	; 0x14000000
+ 8000718:	2d786574 	cfldr64cs	mvdx6, [r8, #-464]!	; 0xfffffe30
+ 800071c:	0600334d 	streq	r3, [r0], -sp, asr #6
+ 8000720:	094d070a 	stmdbeq	sp, {r1, r3, r8, r9, sl}^
+ 8000724:	14041202 	strne	r1, [r4], #-514	; 0xfffffdfe
+ 8000728:	17011501 	strne	r1, [r1, -r1, lsl #10]
+ 800072c:	1a011803 	bne	8046740 <_sidata+0x45dcf>
+ 8000730:	Address 0x08000730 is out of bounds.
 
 
 Disassembly of section .data:

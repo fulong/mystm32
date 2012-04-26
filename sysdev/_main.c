@@ -27,12 +27,12 @@
 void
 _main(void)
 {
+  LED_Init();
   systick_init();
   usart1_init();
   tft_init();
   touch_init();
   interrupt_open();
-  LED_Init();
   systick_enable(1);//systick定时器启动
 }
 
