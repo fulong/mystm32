@@ -79,4 +79,5 @@ typedef struct
 extern void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState);
 extern void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks);
 extern void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState);
+extern void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState);
 #endif /* RCC_H_ */

@@ -12,6 +12,7 @@
  */
 #include "usart.h"
 #include "rcc.h"
+#include "gpio.h"
 
 #define CR1_UE_Set                ((uint16_t)0x2000)  /*!< USART Enable Mask */
 #define CR1_UE_Reset              ((uint16_t)0xDFFF)  /*!< USART Disable Mask */
@@ -58,6 +59,13 @@
 #define CR3_ONEBITE_Reset         ((u16)0xF7FF)  /* USART ONEBITE mode Disable Mask */
 
 
+/**
+  * @brief  Deinitializes the USARTx peripheral registers to their default reset values.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *      USART1, USART2, USART3, UART4 or UART5.
+  * @retval None
+  */
 void USART_DeInit(USART_TypeDef* USARTx)
 {
   /* Check the parameters */
@@ -175,43 +183,87 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
   USARTx->BRR = (uint16_t)tmpreg;
 }
 
-int _fputc(int ch)
+void USART_Configuration(USART_TypeDef *USARTx)
 {
-        while((USART1->SR&0X40)==0);//循环发送,直到发送完毕
-        USART1->DR = (u8) ch;
-        return ch;
+GPIO_InitTypeDef GPIO_InitStructure;
+USART_InitTypeDef USART_InitStructure;
+//使能串口、串口所用的I/O口以及端口复用时钟
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_USART1|RCC_APB2Periph_AFIO, ENABLE);
+/* A9 USART1_Tx */
+GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //推挽输出-TX
+GPIO_Init(GPIOA,&GPIO_InitStructure);
+/* A10 USART1_Rx */
+GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//浮空输入-RX
+GPIO_Init(GPIOA, &GPIO_InitStructure);
+USART_InitStructure.USART_BaudRate = 115200;
+USART_InitStructure.USART_WordLength = USART_DATA_BIT_8;
+USART_InitStructure.USART_StopBits = USART_STOP_BIT_1_0;
+USART_InitStructure.USART_Parity = USART_Parity_No;
+USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX;
+USART_Init(USART1, &USART_InitStructure);
+/* Enable the USARTx */
+USART1_ENABLE(USARTx);
 }
-
-void usart_io_init(void)
-{
-  RCC->APB2ENR|=1<<2;   //使能PORTA口时钟
-  RCC->APB2ENR|=1<<14;  //使能串口时钟
-  GPIOA->CRH&=0XFFFFF00F;
-  GPIOA->CRH|=0X000008B0;//IO状态设置
-
-  RCC->APB2RSTR|=1<<14;   //复位串口1
-  RCC->APB2RSTR&=~(1<<14);//停止复位
-}
-static USART_InitTypeDef INIT_usart1;
 /**
-  * @brief 串口初始化的最终接口，封装好需要的初始化代码
-  *
-  * @param  None
+  * @brief  Checks whether the specified USART flag is set or not.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *   USART1, USART2, USART3, UART4 or UART5.
+  * @param  USART_FLAG: specifies the flag to check.
+  *   This parameter can be one of the following values:
+  *     @arg USART_FLAG_CTS:  CTS Change flag (not available for UART4 and UART5)
+  *     @arg USART_FLAG_LBD:  LIN Break detection flag
+  *     @arg USART_FLAG_TXE:  Transmit data register empty flag
+  *     @arg USART_FLAG_TC:   Transmission Complete flag
+  *     @arg USART_FLAG_RXNE: Receive data register not empty flag
+  *     @arg USART_FLAG_IDLE: Idle Line detection flag
+  *     @arg USART_FLAG_ORE:  OverRun Error flag
+  *     @arg USART_FLAG_NE:   Noise Error flag
+  *     @arg USART_FLAG_FE:   Framing Error flag
+  *     @arg USART_FLAG_PE:   Parity Error flag
+  * @retval The new state of USART_FLAG (SET or RESET).
+  */
+FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)
+{
+  FlagStatus bitstatus = RESET;
+  /* The CTS flag is not available for UART4 and UART5 */
+
+  if ((USARTx->SR & USART_FLAG) != (uint16_t)RESET)
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  return bitstatus;
+}
+/**
+  * @brief  Transmits single data through the USARTx peripheral.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *   USART1, USART2, USART3, UART4 or UART5.
+  * @param  Data: the data to transmit.
   * @retval None
   */
-// Function body
-void
-usart1_init(void)
+void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
 {
-  USART_DeInit(USART1);
-  usart_io_init();
-  INIT_usart1.USART_BaudRate = 115200;
-  INIT_usart1.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  INIT_usart1.USART_StopBits = USART_STOP_BIT_1_0;
-  INIT_usart1.USART_WordLength = USART_DATA_BIT_8;
-  INIT_usart1.USART_Mode = EN_USART_TX+EN_USART_RX;
-  INIT_usart1.USART_Parity = 0;
-  USART_Init(USART1,&INIT_usart1);
+
+  /* Transmit Data */
+  USARTx->DR = (Data & (uint16_t)0x01FF);
 }
-// End Function Name
-//---------------------------------------------------------
+
+
+void USART1_Puts(char * str)
+{
+while(*str)
+{
+USART_SendData(USART1, *str++);
+/* Loop until the end of transmission */
+while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+}
+}

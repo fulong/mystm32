@@ -39,9 +39,6 @@
 .global  g_pfnVectors
 .global  Default_Handler
 
-/* start address for the initialization values of the .data section.
-defined in linker script */
-.word  _sidata
 /* start address for the .data section. defined in linker script */
 .word  _sdata
 /* end address for the .data section. defined in linker script */
@@ -72,8 +69,7 @@ Reset_Handler:
   b  LoopCopyDataInit
 
 CopyDataInit:
-  ldr  r3, =_sidata
-  ldr  r3, [r3, r1]
+  mov  r3, #0
   str  r3, [r0, r1]
   adds  r1, r1, #4
     

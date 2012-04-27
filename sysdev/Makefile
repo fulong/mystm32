@@ -11,5 +11,5 @@ sysdev.compiled:${source_obj} ${source_h}
 	
 
 clean:
-	@echo 正在删除sysdev文件夹.o文件
-	@${RM} *.compiled *.o 
+	@echo 正在删除sys文件夹.o文件
+	-@${RM} *.compiled *.o 

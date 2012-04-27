@@ -35,15 +35,29 @@
 /*数据位为9位*/
 #define USART_DATA_BIT_9                     ((uint16_t)(0x1 << 12))
 
+#define USART_Parity_No                      0
 #define EN_USART_TX                          ((uint16_t)(0x1 << 3))
 #define EN_USART_RX                          ((uint16_t)(0x1 << 2))
 
 #define PARITY_EN                            ((uint16_t)(0x1 << 10))
 #define PARITY_SELECT                        ((uint16_t)(0x1 << 9))
+
+#define USART1_ENABLE(USARTx)                      (USARTx->CR1 |= 0x2000)
+#define USART1_DISABLE(USARTx)                     (USARTx->CR1 &= 0xDFFF)
+
+#define USART_FLAG_CTS                       ((uint16_t)0x0200)
+#define USART_FLAG_LBD                       ((uint16_t)0x0100)
+#define USART_FLAG_TXE                       ((uint16_t)0x0080)
+#define USART_FLAG_TC                        ((uint16_t)0x0040)
+#define USART_FLAG_RXNE                      ((uint16_t)0x0020)
+#define USART_FLAG_IDLE                      ((uint16_t)0x0010)
+#define USART_FLAG_ORE                       ((uint16_t)0x0008)
+#define USART_FLAG_NE                        ((uint16_t)0x0004)
+#define USART_FLAG_FE                        ((uint16_t)0x0002)
+#define USART_FLAG_PE                        ((uint16_t)0x0001)
 /**
   * @brief  USART Init Structure definition
   */
-
 typedef struct
 {
   uint32_t USART_BaudRate;            /*!< This member configures the USART communication baud rate.
@@ -74,7 +88,7 @@ typedef struct
 
 
 
-extern void usart1_init(void);
+extern void USART_Configuration(USART_TypeDef *USARTx);
 extern int _fputc(int ch);
 
 #endif /* USART_H_ */

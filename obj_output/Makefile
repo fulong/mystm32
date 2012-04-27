@@ -9,4 +9,4 @@ lded: ${source_obj}
 
 .PHONY: clean
 clean:
-	@$(RM) lded *.o
+	-@$(RM) lded *.o

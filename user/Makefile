@@ -11,5 +11,5 @@ user.compiled:${source_obj} ${source_h}
 
 .PHONY:clean all
 clean:
-	@echo 正在删除user文件夹.o文件
-	@${RM} *.o *.compiled
+	@echo 正在删除sys文件夹.o文件
+	-@${RM} *.o *.compiled

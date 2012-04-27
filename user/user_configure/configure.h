@@ -1,8 +1,10 @@
 /**
- *  \file	doxygen.h
- *  \brief      这个文件只是将doxygen中的分组代码分隔起来，方便以后对注释文档进行维护
+ *  \file	configure.h
+ *  \brief      这个文件是配置doxygen中的分组代码，方便以后对注释文档进行维护与控制一些开关宏
  *
- *  这个文件的存在与否并不会影响到程序的运作
+ *      能使用的开关宏有:\n
+ *          __DEBUG__:当定义这个宏时，将会打印调试信息，并可以使用调试信息的函数。具体可以看debug_package.h
+ *
  *  \author 	fulong\n
  *  Mail:fulong.mo@gmail.com\n
  *  \version: 	1.0\n

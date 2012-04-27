@@ -5,7 +5,7 @@
  *      Author: fulong
  */
 
-#include "debug.h"
+#include "usart_package.h"
 
 #ifdef __DEBUG__
 

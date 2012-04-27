@@ -1,6 +1,6 @@
 sinclude var.mk
 compiled := sysdev.compiled start_code.compiled  user.compiled stm32f103.compiled \
-			libc.compiled 
+			libc.compiled package.compiled
 
 .PHONY: all clean $(compiled)
 all:stm32f103.bin 
@@ -18,6 +18,10 @@ start_code.compiled:
 	@make -C start_code
 ######################################################
 #######################################################
+package.compiled:
+	@make -C package
+######################################################
+#######################################################
 user.compiled:
 	@make -C user
 ######################################################
@@ -33,7 +37,7 @@ sysdev.compiled:
 	@make -C sysdev
 ######################################################
 clean:
-	@echo "ÕıÔÚÉ¾³ıËùÓĞ±àÒëÊ±Éú³ÉµÄÎÄ¼ş"
+	@echo "åˆ é™¤å„å­æ–‡ä»¶å¤¹ä¸­ç¼–è¯‘å‡ºæ¥çš„å¯¹è±¡æ–‡ä»¶"
 	@${RM}  stm32f103.bin ${elf_output_dir}stm32f103.elf
 	@make -C start_code clean
 	@make -C user clean
@@ -41,4 +45,5 @@ clean:
 	@make -C sysdev clean
 	@make -C obj_output clean		
 	@make -C libc clean		
+	@make -C package clean		
 	

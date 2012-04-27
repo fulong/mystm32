@@ -29,7 +29,7 @@ _main(void)
 {
   LED_Init();
   systick_init();
-  usart1_init();
+  USART_Configuration(USART1);
   tft_init();
   touch_init();
   interrupt_open();

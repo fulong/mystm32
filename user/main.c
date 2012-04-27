@@ -15,6 +15,6 @@ int
 main(void)
 {
   while (1)
-    _fputc('a');
+  USART1_Puts("hello\r\n");
   return 0;
 }

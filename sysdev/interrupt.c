@@ -13,7 +13,6 @@
  */
 #include "interrupt.h"
 #include "led.h"
-#include "debug.h"
 
 
 /**
