@@ -27,13 +27,34 @@
 void
 _main(void)
 {
-  LED_Init();
-  systick_init();
   USART_Configuration(USART1);
+#ifdef __DEBUG__
+  printfs("success to finish usart Configuration!\r\n\r\n");
+#endif
+  LED_Init();
+#ifdef __DEBUG__
+  printfs("success to finish the led screen initiation!\r\n\r\n");
+#endif
+  systick_init();
+#ifdef __DEBUG__
+  printfs("success to finish the systick initiation!\r\n\r\n");
+#endif
   tft_init();
+#ifdef __DEBUG__
+  printfs("success to finish the tft screen initiation!\r\n\r\n");
+#endif
   touch_init();
+#ifdef __DEBUG__
+  printfs("success to finish the touch initiation!\r\n\r\n");
+#endif
   interrupt_open();
+#ifdef __DEBUG__
+  printfs("success to open the interrupt!(including systick's interrupt)\r\n\r\n");
+#endif
   systick_enable(1);//systick定时器启动
+#ifdef __DEBUG__
+  printfs("success to start the systick!\r\n\r\n");
+#endif
 }
 
 // End Function Name

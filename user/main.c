@@ -1,3 +1,5 @@
+#include "./user_configure/include.h"
+#include "../libc/libmath.h"
 /*
  *  File name: 		main.c
  *
@@ -10,11 +12,29 @@
  *  Comment:
 
  */
-#include "../sysdev/usart.h"
 int
 main(void)
 {
-  while (1)
-  USART1_Puts("hello\r\n");
+#ifdef __DEBUG__
+  volatile uint32_t i=100000;
+  uint32_t volatile temp ;
+  INT8U buf[32];
+  printfs("now be in the main funtion\r\n\r\n");
+  oct_transfer(i,buf,'b');
+  printfs(buf);
+  printfs("\r\n\r\n");
+  oct_transfer(i,buf,'h');
+  printfs(buf);
+  printfs("\r\n\r\n");
+  while(1){
+      temp = get_sec();
+      if(i != temp){
+          oct_transfer(temp,buf,'h');
+          printfs(buf);
+          printfs("\r\n");
+          i = temp;
+      }
+  }
+#endif
   return 0;
 }

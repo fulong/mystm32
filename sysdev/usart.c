@@ -187,6 +187,7 @@ void USART_Configuration(USART_TypeDef *USARTx)
 {
 GPIO_InitTypeDef GPIO_InitStructure;
 USART_InitTypeDef USART_InitStructure;
+USART_DeInit(USARTx);
 //使能串口、串口所用的I/O口以及端口复用时钟
 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_USART1|RCC_APB2Periph_AFIO, ENABLE);
 /* A9 USART1_Tx */
@@ -255,15 +256,4 @@ void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
 
   /* Transmit Data */
   USARTx->DR = (Data & (uint16_t)0x01FF);
-}
-
-
-void USART1_Puts(char * str)
-{
-while(*str)
-{
-USART_SendData(USART1, *str++);
-/* Loop until the end of transmission */
-while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
-}
 }

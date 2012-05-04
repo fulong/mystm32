@@ -89,6 +89,6 @@ typedef struct
 
 
 extern void USART_Configuration(USART_TypeDef *USARTx);
-extern int _fputc(int ch);
-
+extern void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
+extern FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
 #endif /* USART_H_ */

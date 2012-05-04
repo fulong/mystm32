@@ -1,7 +1,7 @@
 /*
  *  File name: 		tft.h
  *
- *  Created on: 	����11:37:59 2012-4-20 2012 
+ *  Created on: 	上午11:37:59 2012-4-20 2012
  *  Author: 		fulong
  *  Version: 		1.0
  *  Compiler: 		GCC
@@ -16,6 +16,8 @@
 
 #include "../stm32f103/STM32F10x/stm32f10x.h"
 
-extern void tft_init();
+
+
+extern void tft_init(void);/*!< tft屏的端口配置与初始化 */
 
 #endif /* TFT_H_ */

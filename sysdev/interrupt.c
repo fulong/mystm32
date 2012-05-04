@@ -12,8 +12,7 @@
  *  \date      Apr 24, 2012 2:39:58 PM
  */
 #include "interrupt.h"
-#include "led.h"
-
+INT32U second = 0;
 
 /**
  * @brief 使能systick中断，但这个时候systick还未有开始工作
@@ -28,24 +27,31 @@ interrupt_open()
   systick_enable_int(1);
 }
 // End Function Name
+static BOOLEAN led_glitter=0;
+volatile INT32U counter = 0;
 
 //---------------------------------------------------------
-#ifdef LED_H_
-static volatile unsigned char i=0;
-#endif
 void systick_Handle(void)
 {
 #ifdef LED_H_
-  if(i < 100)
+  if(counter == SEC)
     {
-      i++;
-      LED1 = 0;
-    }
-  else
-    {
-      i++;
-      if(i == 200)i=0;
-      LED1 = 1;
+      if(led_glitter)
+      {
+          led_glitter = 0;
+          LED1 = 0;
+      }
+      else
+      {
+          led_glitter = 1;
+          LED1 = 1;
+      }
     }
 #endif
+  if (counter == SEC)//时间达到一秒后，秒会自增
+  {
+      counter = 0;
+      second++;
+  }
+  counter++;
 }

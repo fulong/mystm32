@@ -16,9 +16,13 @@
 #define INTERRUPT_H_
 
 #include "../stm32f103/STM32F10x/stm32f10x.h"
+#include "led.h"
 
 
 #define systick_enable_int(tickenable)        SysTick->CTRL |= (tickenable << 1)
+
+#define SEC                                   (100)
+
 /*
 select_int_or_tickenable:1,��?ʱ����
 */

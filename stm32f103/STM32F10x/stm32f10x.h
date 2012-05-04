@@ -1,4 +1,4 @@
-/**
+﻿/**
   ******************************************************************************
   * @file    stm32f10x.h
   * @author  MCD Application Team
@@ -92,6 +92,7 @@
    the Flash memory density ranges between 512 and 1024 Kbytes.
  - Connectivity line devices are STM32F105xx and STM32F107xx microcontrollers.
   */
+#include "../../user/user_configure/configure.h"
 
 #if !defined (STM32F10X_LD) && !defined (STM32F10X_LD_VL) && !defined (STM32F10X_MD) && !defined (STM32F10X_MD_VL) && !defined (STM32F10X_HD) && !defined (STM32F10X_HD_VL) && !defined (STM32F10X_XL) && !defined (STM32F10X_CL)
  #error "Please select first the target STM32F10x device used in your application (in stm32f10x.h file)"
@@ -478,7 +479,8 @@ typedef enum IRQn
 
 #include "../CoreSupport/core_cm3.h"
 #include "system_stm32f10x.h"
-#include <stdint.h>
+#include "../../user/user_configure/cpu_typed.h"
+
 
 /** @addtogroup Exported_types
   * @{

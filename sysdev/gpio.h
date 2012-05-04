@@ -17,6 +17,11 @@
 
 #include "../stm32f103/STM32F10x/stm32f10x.h"
 
+//JTAG模式设置定义
+#define JTAG_SWD_DISABLE   0X02
+#define SWD_ENABLE         0X01
+#define JTAG_SWD_ENABLE    0X00
+
 #define GPIO_Pin_0                 ((uint16_t)0x0001)  /*!< Pin 0 selected */
 #define GPIO_Pin_1                 ((uint16_t)0x0002)  /*!< Pin 1 selected */
 #define GPIO_Pin_2                 ((uint16_t)0x0004)  /*!< Pin 2 selected */
@@ -76,4 +81,5 @@ typedef struct
 }GPIO_InitTypeDef;
 
 extern void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct);
+extern void JTAG_Set(u8 mode);
 #endif /* GPIO_H_ */
