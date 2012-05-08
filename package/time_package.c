@@ -41,8 +41,8 @@ INT32U get_ms(void)
   */
 void delay(INT8U ms)
 {
-  INT32U sum_cur;
-  INT32U sum_pre;
+  INT32U sum_cur;//单位是十毫秒
+  INT32U sum_pre;//单位是十毫秒
   sum_pre = get_sec()*100 + get_ms();
   sum_cur = sum_pre;
   while((sum_cur - sum_pre) != ms)//判断延时到了没有

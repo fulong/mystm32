@@ -185,29 +185,24 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
 
 void USART_Configuration(USART_TypeDef *USARTx)
 {
-GPIO_InitTypeDef GPIO_InitStructure;
 USART_InitTypeDef USART_InitStructure;
 USART_DeInit(USARTx);
 //使能串口、串口所用的I/O口以及端口复用时钟
 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_USART1|RCC_APB2Periph_AFIO, ENABLE);
 /* A9 USART1_Tx */
-GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
-GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //推挽输出-TX
-GPIO_Init(GPIOA,&GPIO_InitStructure);
+set_io(GPIOA,GPIO_Mode_AF_PP,GPIO_Pin_9,GPIO_Speed_2MHz);//推挽输出-TX
 /* A10 USART1_Rx */
-GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//浮空输入-RX
-GPIO_Init(GPIOA, &GPIO_InitStructure);
+set_io(GPIOA,GPIO_Mode_AF_PP,GPIO_Pin_10,GPIO_Mode_IN_FLOATING);//浮空输入-RX
+
 USART_InitStructure.USART_BaudRate = 115200;
 USART_InitStructure.USART_WordLength = USART_DATA_BIT_8;
 USART_InitStructure.USART_StopBits = USART_STOP_BIT_1_0;
 USART_InitStructure.USART_Parity = USART_Parity_No;
 USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX;
+USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX | USART_FLAG_TC;//|USART_FLAG_RXNE /*开RX中断*/| USART_FLAG_TXE;
 USART_Init(USART1, &USART_InitStructure);
 /* Enable the USARTx */
-USART1_ENABLE(USARTx);
+USART_ENABLE(USARTx);
 }
 /**
   * @brief  Checks whether the specified USART flag is set or not.
@@ -257,3 +252,16 @@ void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
   /* Transmit Data */
   USARTx->DR = (Data & (uint16_t)0x01FF);
 }
+/**
+  * @brief  Returns the most recent received data by the USARTx peripheral.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *   USART1, USART2, USART3, UART4 or UART5.
+  * @retval The received data.
+  */
+uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
+{
+  /* Receive Data */
+  return (uint16_t)(USARTx->DR & (uint16_t)0x01FF);
+}
+

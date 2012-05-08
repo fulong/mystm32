@@ -2,7 +2,6 @@
  *  \file	rcc.c
  *  \brief   
  *
- *  \detail     
  *
  *  \author 	fulong\n
  *  Mail:fulong.mo@gmail.com\n

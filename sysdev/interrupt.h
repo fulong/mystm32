@@ -35,8 +35,7 @@ select_int_or_tickenable:1,��?ʱ����
  * @{
  * @brief sysdev文件夹的函数
  */
-extern void interrupt_open();
-
+extern void NVIC_Init(void);/*!< NVIC初始化，设置中断组,中断初始化等等 */
 /**@}*/
 /**@}*/
 

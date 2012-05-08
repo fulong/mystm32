@@ -19,6 +19,11 @@ main(void)
   volatile uint32_t i=100000;
   uint32_t volatile temp ;
   INT8U buf[32];
+
+  communication_agreement_start();
+  printfs("agreement is enable!");
+  printfs("\r\n\r\n");
+
   printfs("now be in the main funtion\r\n\r\n");
   oct_transfer(i,buf,'b');
   printfs(buf);

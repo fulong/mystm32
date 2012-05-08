@@ -47,7 +47,7 @@ _main(void)
 #ifdef __DEBUG__
   printfs("success to finish the touch initiation!\r\n\r\n");
 #endif
-  interrupt_open();
+  NVIC_Init();
 #ifdef __DEBUG__
   printfs("success to open the interrupt!(including systick's interrupt)\r\n\r\n");
 #endif

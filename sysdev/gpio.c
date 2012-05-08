@@ -2,7 +2,6 @@
  *  \file	gpio.c
  *  \brief   
  *
- *  \detail     
  *
  *  \author 	fulong\n
  *  Mail:fulong.mo@gmail.com\n
@@ -103,13 +102,12 @@ void GPIO_Init(GPIO_TypeDef* GPIOx, GPIO_InitTypeDef* GPIO_InitStruct)
 }
 /**
   * @brief  JTAG模式设置,用于设置JTAG的模式
-  * @param  mode:\n
-  *             jtag,swd模式设置;\n
-  *             00,全使能;\n
-  *             01,使能SWD;\n
-  *             10,全关闭;
+  * @param  mode: jtag,swd模式设置;\n
+  *             00,全使能\n
+  *             01,使能SWD\n
+  *             10,全关闭
   * @retval none
-  * \data 2012-5-3 上午11:00:58
+  * \date 2012-5-3 上午11:00:58
   */
 void JTAG_Set(u8 mode)
 {
@@ -119,4 +117,42 @@ void JTAG_Set(u8 mode)
         RCC->APB2ENR |= 1<<0;     //开启辅助时钟
         AFIO->MAPR&=0XF8FFFFFF; //清除MAPR的[26:24]
         AFIO->MAPR |= temp;       //设置jtag模式
+}
+/**
+  * @brief  设置io口中的状态
+  * @param  GPIOMode_TypeDef_x: 指定模式,只能指定一个模式\n
+  *             GPIO_Mode_AIN\n
+  *             GPIO_Mode_IN_FLOATING\n
+  *             GPIO_Mode_IPD\n
+  *             GPIO_Mode_IPU\n
+  *             GPIO_Mode_Out_OD\n
+  *             GPIO_Mode_Out_PP\n
+  *             GPIO_Mode_AF_OD\n
+  *             GPIO_Mode_AF_PP
+  *
+  * @param  GPIO_Pinx: 要改变状态的引脚，可以将要改变的引脚都加起来，进行同时配置.\n
+  *             GPIO_Pin_0\n
+  *             .\n
+  *             .\n
+  *             .\n
+  *             GPIO_Pin_15
+  *
+  * @param  GPIOx: 要改变状态的IO组（GPIOA-GPIOG）
+  * @param  GPIO_Speed_x: io口对应的速度设置\n
+  *                     GPIO_Speed_10MHz\n
+  *                     GPIO_Speed_2MH\n
+  *                     GPIO_Speed_50MHz
+  *
+  *
+  * @retval none
+  * \date 2012-5-4 下午4:33:21
+  */
+void set_io(GPIO_TypeDef* GPIOx,GPIOMode_TypeDef GPIOMode_TypeDef_x,uint16_t GPIO_Pinx,GPIOSpeed_TypeDef GPIO_Speed_x)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pinx;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_x;
+  GPIO_InitStructure.GPIO_Mode = GPIOMode_TypeDef_x;
+  GPIO_Init(GPIOx,&GPIO_InitStructure);
+
 }

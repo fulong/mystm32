@@ -123,6 +123,11 @@ Infinite_Loop:
 Default_SysTick_Handler:
   b  systick_Handle
   .size  Default_SysTick_Handler, .-Default_SysTick_Handler
+    .section  .text.USART1_DEFAULT_IRQHandler,"ax",%progbits
+USART1_DEFAULT_IRQHandler:
+  b  USART1_Handler
+  .size  USART1_DEFAULT_IRQHandler, .-USART1_DEFAULT_IRQHandler
+
 /******************************************************************************
 *
 * The minimal vector table for a Cortex M3. Note that the proper constructs
@@ -405,7 +410,7 @@ g_pfnVectors:
   .thumb_set SPI2_IRQHandler,Default_Handler
 
   .weak  USART1_IRQHandler
-  .thumb_set USART1_IRQHandler,Default_Handler
+  .thumb_set USART1_IRQHandler,USART1_DEFAULT_IRQHandler
 
   .weak  USART2_IRQHandler
   .thumb_set USART2_IRQHandler,Default_Handler

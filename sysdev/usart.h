@@ -1,7 +1,7 @@
 /*
  *  File name: 		usart.h
  *
- *  Created on: 	����11:39:03 2012-4-20 2012 
+ *  Created on: 	上午11:39:03 2012-4-20 2012
  *  Author: 		fulong
  *  Version: 		1.0
  *  Compiler: 		GCC
@@ -42,8 +42,8 @@
 #define PARITY_EN                            ((uint16_t)(0x1 << 10))
 #define PARITY_SELECT                        ((uint16_t)(0x1 << 9))
 
-#define USART1_ENABLE(USARTx)                      (USARTx->CR1 |= 0x2000)
-#define USART1_DISABLE(USARTx)                     (USARTx->CR1 &= 0xDFFF)
+#define USART_ENABLE(USARTx)                      (USARTx->CR1 |= 0x2000)
+#define USART_DISABLE(USARTx)                     (USARTx->CR1 &= 0xDFFF)
 
 #define USART_FLAG_CTS                       ((uint16_t)0x0200)
 #define USART_FLAG_LBD                       ((uint16_t)0x0100)
@@ -90,5 +90,6 @@ typedef struct
 
 extern void USART_Configuration(USART_TypeDef *USARTx);
 extern void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
+extern uint16_t USART_ReceiveData(USART_TypeDef* USARTx);
 extern FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
 #endif /* USART_H_ */
