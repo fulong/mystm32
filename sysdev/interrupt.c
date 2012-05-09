@@ -122,7 +122,7 @@ void systick_Handle(void)
   * @param none
   * @retval none
   * \date 2012-5-8 下午4:00:54
-  * @note
+  * @not
   */
 void USART1_Handler(void)
 {
