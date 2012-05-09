@@ -1,8 +1,8 @@
 #ifndef CFG_H__
 #define CFG_H__
 /**
- *  \file	configure.h
- *  \brief      这个文件是配置doxygen中的分组代码，方便以后对注释文档进行维护与控制一些开关宏
+ *  @file	configure.h
+ *  @brief      这个文件是配置doxygen中的分组代码，方便以后对注释文档进行维护与控制一些开关宏
  *
  *      能使用的开关宏有:\n
  *          __DEBUG__:当定义这个宏时，将会打印调试信息，并可以使用调试信息的函数。具体可以看debug_package.h\n
@@ -39,7 +39,6 @@
 /**@}*/
 
 /**@}*/
-
 
 #define __DEBUG__
 #define PARAM_CHECK
