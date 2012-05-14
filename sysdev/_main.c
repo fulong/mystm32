@@ -51,14 +51,15 @@ void _main(void)
 	printfs(
 			"success to open the interrupt!(including systick's interrupt)\r\n\r\n");
 #endif
+#if SYSTICK_INT == 1
 	systick_enable(1);
 	//systick定时器启动
 #ifdef __DEBUG__
 	printfs("success to start the systick!\r\n\r\n");
 #endif
+#endif
 	communication_agreement_start();
 	printfs("agreement is enable!\r\n");
-
 }
 
 // End Function Name

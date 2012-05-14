@@ -38,7 +38,7 @@ sysdev.compiled:
 ######################################################
 clean:
 	@echo "删除各子文件夹中编译出来的对象文件"
-	@${RM}  stm32f103.bin ${elf_output_dir}stm32f103.elf
+	@${RM}  stm32f103.bin ${elf_output_dir}stm32f103.elf ${elf_output_dir}stm32f103.dis
 	@make -C start_code clean
 	@make -C user clean
 	@make -C stm32f103 clean

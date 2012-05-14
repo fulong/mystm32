@@ -20,7 +20,11 @@ int main(void)
 	uint32_t volatile temp;
 	INT8U buf[32];
 */
-	printfs("abc\r\n");
+while(1)
+{
+	printfs("test\r\n");
+	delay(1000,0);
+}
 /*
 	printfs_int("\r\n\r\n");
 

@@ -42,5 +42,7 @@
 
 #define __DEBUG__
 #define PARAM_CHECK
+#define SYSTICK_INT								0 /*!< 这个宏为一的时候，表明systick将用在systick中断中，否则则只为了单纯的轮询延时。 */
+
 
 #endif

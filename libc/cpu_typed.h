@@ -12,6 +12,7 @@
 
 #ifndef CPU_TYPED_H_
 #define CPU_TYPED_H_
+#include "../user/user_configure/configure.h"
 
 /*
 *********************************************************************************************************

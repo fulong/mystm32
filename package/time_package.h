@@ -14,9 +14,12 @@
 #define TIME_PACKAGE_H_
 
 #include "../libc/cpu_typed.h"
-
+#include "../sysdev/systick.h"
+#if SYSTICK_INT == 1
 extern INT32U get_sec(void);/*!< 取得函数运行的秒数 */
 extern INT32U get_ms(void);/*!< 取得函数运行的毫秒数 */
 extern void delay(INT8U ms);/*!< 延时ms*10毫秒，不是准确延时，误差在10MS以下 */
+#endif
+extern void delay(INT16U ms, INT32U us);
 
 #endif /* TIME_PACKAGE_H_ */

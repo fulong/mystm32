@@ -1,7 +1,7 @@
 /*
  *  File name: 		systick.h
  *
- *  Created on: 	ÉÏÎç11:14:09 2012-4-20 2012 
+ *  Created on: 	ï¿½ï¿½ï¿½ï¿½11:14:09 2012-4-20 2012 
  *  Author: 		fulong
  *  Version: 		1.0
  *  Compiler: 		GCC
@@ -17,14 +17,19 @@
 #include "../stm32f103/STM32F10x/stm32f10x.h"
 
 /*
-select_int_or_tickenable:1,´ú±í¶¨Ê±Æ÷¿ª
+select_int_or_tickenable:1,ï¿½ï¿½?Ê±ï¿½ï¿½
 */
 #define systick_enable(tickenable)        SysTick->CTRL |= tickenable
 /*
-select_int_or_tickenable:1,´ú±í¶¨Ê±Æ÷¹Ø
+select_int_or_tickenable:1,ï¿½ï¿½?Ê±ï¿½ï¿½ï¿½
 */
 #define systick_disable(tickenable)       SysTick->CTRL &= (~(tickenable))
 
 extern void systick_init(void);
+
+#if SYSTICK_INT != 1
+extern void delay_ms(u16 ms);
+extern void delay_us(u32 us);
+#endif
 
 #endif /* SYSTICK_H_ */

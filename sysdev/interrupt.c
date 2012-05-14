@@ -24,7 +24,7 @@ extern INT8U USART_length;
 // Function body
 void interrupt_open()
 {
-	USART_length = 0;//初始化串口中断发送的字符串长度
+	USART_length = 0; //初始化串口中断发送的字符串长度
 	systick_enable_int(1);
 }
 /**
@@ -92,11 +92,22 @@ void NVIC_Init(void)
 	interrupt_open();
 	nvic_group(3, 3, USART1_IRQn, 2); //组2，最低优先级
 }
-static BOOLEAN led_glitter = 0;
+/**
+ * @brief  systick中断函数
+ * @param none
+ *  这个参数可以取得到以下的值：\n
+ *  	@arg
+ * @retval none
+ * \date 2012-5-14 下午3:19:18
+ * @note SYSTICK_INT宏来控制这个函数的状态。1，代表使用中断。否则，则不便宜
+ */
+#if SYSTICK_INT == 1
 volatile INT32U counter = 0;
-//---------------------------------------------------------
+static BOOLEAN led_glitter = 0;
+#endif
 void systick_Handle(void)
 {
+#if SYSTICK_INT == 1
 #ifdef __LED_H__
 	if (counter == SEC)
 	{
@@ -118,8 +129,8 @@ void systick_Handle(void)
 		second++;
 	}
 	counter++;
+#endif
 }
-
 /**
  * @brief 串口的中断函数
  * @param none
@@ -133,16 +144,15 @@ void USART1_Handler(void)
 	{
 
 		USART1->SR &= (~USART_FLAG_TC);
-		if(USART_length !=0 )
+		if (USART_length != 0)
 		{
 			USART_SendData(USART1, *TX_buf_bp++);
 			USART_length--;
 		}
-		else//(length == 0)
-		{//字符串发送完毕，发送缓冲区指针复位
+		else //(length == 0)
+		{ //字符串发送完毕，发送缓冲区指针复位
 			TX_buf_bp = TX_buf;
-			USARTx_IT_Configure(USART1, USART_FLAG_TXE_INT
-									   ,DISABLE);
+			USARTx_IT_Configure(USART1, USART_FLAG_TXE_INT, DISABLE);
 		}
 	}
 //	if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
