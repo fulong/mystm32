@@ -50,7 +50,7 @@
 #ifndef __STM32F10x_H
 #define __STM32F10x_H
 
-#define STM32F10X_MD
+#define STM32F10X_HD
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -479,7 +479,7 @@ typedef enum IRQn
 
 #include "../CoreSupport/core_cm3.h"
 #include "system_stm32f10x.h"
-#include "../../user/user_configure/cpu_typed.h"
+#include "../../libc/cpu_typed.h"
 
 
 /** @addtogroup Exported_types

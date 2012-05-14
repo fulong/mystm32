@@ -13,6 +13,7 @@
  */
 #include "interrupt.h"
 INT32U second = 0;
+extern INT8U USART_length;
 
 /**
  * @brief 使能systick中断，但这个时候systick还未有开始工作
@@ -23,6 +24,7 @@ INT32U second = 0;
 // Function body
 void interrupt_open()
 {
+	USART_length = 0;//初始化串口中断发送的字符串长度
 	systick_enable_int(1);
 }
 /**
@@ -87,8 +89,8 @@ void nvic_group(u8 NVIC_PreemptionPriority, u8 NVIC_SubPriority,
  */
 void NVIC_Init(void)
 {
-	nvic_group(3, 3, USART1_IRQn, 2); //组2，最低优先级
 	interrupt_open();
+	nvic_group(3, 3, USART1_IRQn, 2); //组2，最低优先级
 }
 static BOOLEAN led_glitter = 0;
 volatile INT32U counter = 0;
@@ -127,14 +129,26 @@ void systick_Handle(void)
  */
 void USART1_Handler(void)
 {
-	if (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == SET)
+	if ((USART_GetFlagStatus(USART1, USART_FLAG_TXE) == SET))
 	{
+
 		USART1->SR &= (~USART_FLAG_TC);
+		if(USART_length !=0 )
+		{
+			USART_SendData(USART1, *TX_buf_bp++);
+			USART_length--;
+		}
+		else//(length == 0)
+		{//字符串发送完毕，发送缓冲区指针复位
+			TX_buf_bp = TX_buf;
+			USARTx_IT_Configure(USART1, USART_FLAG_TXE_INT
+									   ,DISABLE);
+		}
 	}
-	if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
-	{
-		while (1)
-			;
-	}
+//	if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
+//	{
+//		while (1)
+//			;
+//	}
 }
 

@@ -1,18 +1,19 @@
-/*
- *  File name: 		usart.c
+/**
+ *  \file	usart.c
+ *  \brief  驱动串口的基本函数
  *
- *  Created on: 	����11:44:23 2012-4-20 2012 
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-
+ *  \author 	fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version: 	1.0\n
+ *  compiler:GCC\n
+ *  \date       2012-5-9 上午11:45:43
  */
+
 #include "usart.h"
 #include "rcc.h"
 #include "gpio.h"
+
+
 
 #define CR1_UE_Set                ((uint16_t)0x2000)  /*!< USART Enable Mask */
 #define CR1_UE_Reset              ((uint16_t)0xDFFF)  /*!< USART Disable Mask */
@@ -68,7 +69,6 @@
 void USART_DeInit(USART_TypeDef* USARTx)
 {
 	/* Check the parameters */
-//  assert_param(IS_USART_ALL_PERIPH(USARTx));
 	if (USARTx == USART1)
 	{
 		RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART1, ENABLE);
@@ -202,12 +202,49 @@ void USART_Configuration(USART_TypeDef *USARTx)
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_HardwareFlowControl =
 			USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX | USART_FLAG_TC; //|USART_FLAG_RXNE /*开RX中断*/| USART_FLAG_TXE;
+	USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX ;
 	USART_Init(USART1, &USART_InitStructure);
 	/* Enable the USARTx */
 	USART_ENABLE(USARTx);
+
 }
 /**
+  * @brief 配置串口的中断
+  * @param USARTx: 要配置的串口\n
+  * 	 这个参数可以取得到以下的值：\n
+  * 	 @arg USART1 串口1
+  * 	 @arg USART2 串口2
+  * 	 @arg USART3 串口3
+  * @param flags: 要配置的串口中断源。\n
+  * 	 这个参数可以取得到以下的值：\n
+  * 	 @arg USART_FLAG_PE_INT 使能奇偶矫正中断
+  * 	 @arg USART_FLAG_TXE_INT 当TXR空时中断
+  * 	 @arg USART_FLAG_TC_INT 当发送完后中断
+  * 	 @arg USART_FLAG_RXNE_INT 当接受完后中断
+  * 	 @arg USART_FLAG_IDLE_INT 当挂起时中断
+  * 	 @arg USART_FLAG_ALL_INT 所有中断源打开
+  * @param NewState: 函数的运行状态\n
+  * 	 这个参数可以取得到以下的值：\n
+  * 	 @arg DISABLE 关闭指定的串口中断源
+  * 	 @arg ENABLE 打开指定的串口中断源
+  * @retval none
+  * \date 2012-5-9 上午10:41:19
+  * @note 如果需要开多的中断，则可以将上面标志或起来，或者加起来，USART_FLAG_INT_ALL是所有标志位的总和。\n
+  * 如果要除能多个中断源，方面跟使能的一样。
+  */
+void USARTx_IT_Configure(USART_TypeDef *USARTx, uint16_t flags ,FunctionalState NewState)
+{
+	if (NewState == ENABLE)
+	{
+		USARTx->CR1 |= flags;
+	}
+	else
+	{
+		USARTx->CR1 &= ~flags;
+	}
+}
+
+/**y
  * @brief  Checks whether the specified USART flag is set or not.
  * @param  USARTx: Select the USART or the UART peripheral.
  *   This parameter can be one of the following values:

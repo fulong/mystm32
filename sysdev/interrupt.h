@@ -19,6 +19,10 @@
 #include "led.h"
 #include "usart.h"
 
+extern INT8U* TX_buf_bp;
+extern INT8U TX_buf[64];
+extern INT8U RX_buf[64];
+
 #define systick_enable_int(tickenable)        SysTick->CTRL |= (tickenable << 1)
 
 #define SEC                                   (100)

@@ -13,7 +13,7 @@
 #ifndef TIME_PACKAGE_H_
 #define TIME_PACKAGE_H_
 
-#include "../user/user_configure/cpu_typed.h"
+#include "../libc/cpu_typed.h"
 
 extern INT32U get_sec(void);/*!< 取得函数运行的秒数 */
 extern INT32U get_ms(void);/*!< 取得函数运行的毫秒数 */

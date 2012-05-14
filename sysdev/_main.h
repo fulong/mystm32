@@ -18,6 +18,7 @@
 #include "../sysdev/tft.h"
 #include "../package/usart_package.h"
 #include "../sysdev/led.h"
+#include "../libc/commucation.h"
 
 
 

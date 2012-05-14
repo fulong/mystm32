@@ -24,37 +24,41 @@
  */
 
 // Function body
-void
-_main(void)
+void _main(void)
 {
-  USART_Configuration(USART1);
+	USART_Configuration(USART1);
 #ifdef __DEBUG__
-  printfs("success to finish usart Configuration!\r\n\r\n");
+	printfs("success to finish usart Configuration!\r\n\r\n");
 #endif
-  LED_Init();
+	LED_Init();
 #ifdef __DEBUG__
-  printfs("success to finish the led screen initiation!\r\n\r\n");
+	printfs("success to finish the led screen initiation!\r\n\r\n");
 #endif
-  systick_init();
+	systick_init();
 #ifdef __DEBUG__
-  printfs("success to finish the systick initiation!\r\n\r\n");
+	printfs("success to finish the systick initiation!\r\n\r\n");
 #endif
-  tft_init();
+	tft_init();
 #ifdef __DEBUG__
-  printfs("success to finish the tft screen initiation!\r\n\r\n");
+	printfs("success to finish the tft screen initiation!\r\n\r\n");
 #endif
-  touch_init();
+	touch_init();
 #ifdef __DEBUG__
-  printfs("success to finish the touch initiation!\r\n\r\n");
+	printfs("success to finish the touch initiation!\r\n\r\n");
 #endif
-  NVIC_Init();
+	NVIC_Init();
 #ifdef __DEBUG__
-  printfs("success to open the interrupt!(including systick's interrupt)\r\n\r\n");
+	printfs(
+			"success to open the interrupt!(including systick's interrupt)\r\n\r\n");
 #endif
-  systick_enable(1);//systick定时器启动
+	systick_enable(1);
+	//systick定时器启动
 #ifdef __DEBUG__
-  printfs("success to start the systick!\r\n\r\n");
+	printfs("success to start the systick!\r\n\r\n");
 #endif
+	communication_agreement_start();
+	printfs("agreement is enable!\r\n");
+
 }
 
 // End Function Name

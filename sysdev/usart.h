@@ -1,14 +1,12 @@
-/*
- *  File name: 		usart.h
+/**
+ *  \file	usart.h
+ *  \brief  驱动串口的基本函数
  *
- *  Created on: 	上午11:39:03 2012-4-20 2012
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-
+ *  \author 	fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version: 	1.0\n
+ *  compiler:GCC\n
+ *  \date       2012-5-9 上午11:45:43
  */
 
 #ifndef USART_H_
@@ -44,7 +42,7 @@
 
 #define USART_ENABLE(USARTx)                      (USARTx->CR1 |= 0x2000)
 #define USART_DISABLE(USARTx)                     (USARTx->CR1 &= 0xDFFF)
-
+//状态寄存器标志
 #define USART_FLAG_CTS                       ((uint16_t)0x0200)
 #define USART_FLAG_LBD                       ((uint16_t)0x0100)
 #define USART_FLAG_TXE                       ((uint16_t)0x0080)
@@ -55,6 +53,13 @@
 #define USART_FLAG_NE                        ((uint16_t)0x0004)
 #define USART_FLAG_FE                        ((uint16_t)0x0002)
 #define USART_FLAG_PE                        ((uint16_t)0x0001)
+//中断状态标志
+#define USART_FLAG_PE_INT				     ((uint16_t)0x0100)
+#define USART_FLAG_TXE_INT                 	 ((uint16_t)0x0080)
+#define USART_FLAG_TC_INT                    ((uint16_t)0x0040)
+#define USART_FLAG_RXNE_INT                  ((uint16_t)0x0020)
+#define USART_FLAG_IDLE_INT                  ((uint16_t)0x0010)
+#define USART_FLAG_ALL_INT					 ((uint16_t)0x01F0)
 /**
  * @brief  USART Init Structure definition
  */
@@ -86,9 +91,11 @@ typedef struct
 	 This parameter can be a value of @ref USART_Hardware_Flow_Control */
 } USART_InitTypeDef;
 
+
 extern void USART_Configuration(USART_TypeDef *USARTx);
 extern void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
 extern uint16_t USART_ReceiveData(USART_TypeDef* USARTx);
 extern FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx,
 		uint16_t USART_FLAG);
+extern void USARTx_IT_Configure(USART_TypeDef *USARTx, uint16_t flags ,FunctionalState NewState);
 #endif /* USART_H_ */
