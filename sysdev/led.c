@@ -13,6 +13,8 @@
  */
 
 #include "led.h"
+#include "gpio.h"
+#include "rcc.h"
 /**
  * @brief 初始化连接到LED的P口（PA8与PD2），使他们都输出高电平
  * @note 在使用GPIO作为输入输出的时候，要先设置好端口频率，这时初始化端口工作频率。
@@ -21,11 +23,10 @@
  */
 void LED_Init(void)
 {
-        RCC->APB2ENR|=1<<5;    //ʹ��PORTDʱ��
-
-        GPIOD->CRL&=0XFFFFF0FF;
-        GPIOD->CRL|=0X00000300;//PD.2�������
-        GPIOD->ODR|=1<<2;      //PD.2�����
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO, ENABLE);
+	set_io(GPIOD, GPIO_Mode_Out_PP, GPIO_Pin_13 | GPIO_Pin_6 | GPIO_Pin_12, GPIO_Speed_50MHz);
+	LED1 = 0 ;
+	LED2 = 0 ;
+	LED3 = 0 ;
 }
-
 

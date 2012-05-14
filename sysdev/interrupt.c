@@ -97,7 +97,7 @@ volatile INT32U counter = 0;
 //---------------------------------------------------------
 void systick_Handle(void)
 {
-#ifdef LED_H_
+#ifdef __LED_H__
 	if (counter == SEC)
 	{
 		if (led_glitter)
