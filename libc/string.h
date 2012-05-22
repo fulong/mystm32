@@ -13,7 +13,7 @@
 #define STRING_H_
 
 #include "../user/user_configure/configure.h"
-#include "../user/user_configure/include.h"
+#include "../libc/cpu_typed.h"
 
 extern INT32U strlen(INT8U * str);
 extern void *memcpy(void *dest, const void *source, INT32U size);

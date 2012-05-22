@@ -1,19 +1,7 @@
-/**
- *  \file	usart.c
- *  \brief  驱动串口的基本函数
- *
- *  \author 	fulong\n
- *  Mail:fulong.mo@gmail.com\n
- *  \version: 	1.0\n
- *  compiler:GCC\n
- *  \date       2012-5-9 上午11:45:43
- */
-
 #include "usart.h"
 #include "rcc.h"
-#include "gpio.h"
-
-
+/* �������� --------------------------------------------------------------*/
+/* ���ö��� --------------------------------------------------------------*/
 
 #define CR1_UE_Set                ((uint16_t)0x2000)  /*!< USART Enable Mask */
 #define CR1_UE_Reset              ((uint16_t)0xDFFF)  /*!< USART Disable Mask */
@@ -51,257 +39,134 @@
 #define GTPR_MSB_Mask             ((uint16_t)0xFF00)  /*!< Guard Time Register MSB Mask */
 #define IT_Mask                   ((uint16_t)0x001F)  /*!< USART Interrupt Mask */
 
-/* USART OverSampling-8 Mask */
-#define CR1_OVER8_Set             ((u16)0x8000)  /* USART OVER8 mode Enable Mask */
-#define CR1_OVER8_Reset           ((u16)0x7FFF)  /* USART OVER8 mode Disable Mask */
-
-/* USART One Bit Sampling Mask */
-#define CR3_ONEBITE_Set           ((u16)0x0800)  /* USART ONEBITE mode Enable Mask */
-#define CR3_ONEBITE_Reset         ((u16)0xF7FF)  /* USART ONEBITE mode Disable Mask */
-
+/* ���ú� -------------------------------------------------------------*/
+/* ���ñ� -----------------------------------------------------------*/
+/* ���ú���ԭ�� -------------------------------------------------------*/
+/* ���ú��� -----------------------------------------------------------*/
 /**
- * @brief  Deinitializes the USARTx peripheral registers to their default reset values.
- * @param  USARTx: Select the USART or the UART peripheral.
- *   This parameter can be one of the following values:
- *      USART1, USART2, USART3, UART4 or UART5.
- * @retval None
- */
-void USART_DeInit(USART_TypeDef* USARTx)
-{
-	/* Check the parameters */
-	if (USARTx == USART1)
-	{
-		RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART1, ENABLE);
-		RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART1, DISABLE);
-	}
-	else if (USARTx == USART2)
-	{
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART2, ENABLE);
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART2, DISABLE);
-	}
-	else if (USARTx == USART3)
-	{
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART3, ENABLE);
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART3, DISABLE);
-	}
-	else if (USARTx == UART4)
-	{
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART4, ENABLE);
-		RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART4, DISABLE);
-	}
-	else
-	{
-		if (USARTx == UART5)
-		{
-			RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART5, ENABLE);
-			RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART5, DISABLE);
-		}
-	}
-}
-
-/**
- * @brief  Initializes the USARTx peripheral according to the specified
- *         parameters in the USART_InitStruct .
- * @param  USARTx: Select the USART or the UART peripheral.
- *   This parameter can be one of the following values:
- *   USART1, USART2, USART3, UART4 or UART5.
- * @param  USART_InitStruct: pointer to a USART_InitTypeDef structure
- *         that contains the configuration information for the specified USART
- *         peripheral.
- * @retval None
- */
-void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
-{
-	uint32_t tmpreg = 0x00, apbclock = 0x00;
-	uint32_t integerdivider = 0x00;
-	uint32_t fractionaldivider = 0x00;
-	uint32_t usartxbase = 0;
-	RCC_ClocksTypeDef RCC_ClocksStatus;
-	/* The hardware flow control is available only for USART1, USART2 and USART3 */
-
-	usartxbase = (uint32_t) USARTx;
-
-	/*---------------------------- USART CR2 Configuration -----------------------*/
-	tmpreg = USARTx->CR2;
-	/* Clear STOP[13:12] bits */
-	tmpreg &= CR2_STOP_CLEAR_Mask;
-	/* Configure the USART Stop Bits, Clock, CPOL, CPHA and LastBit ------------*/
-	/* Set STOP[13:12] bits according to USART_StopBits value */
-	tmpreg |= (uint32_t) USART_InitStruct->USART_StopBits;
-
-	/* Write to USART CR2 */
-	USARTx->CR2 = (uint16_t) tmpreg;
-
-	/*---------------------------- USART CR1 Configuration -----------------------*/
-	tmpreg = USARTx->CR1;
-	/* Clear M, PCE, PS, TE and RE bits */
-	tmpreg &= CR1_CLEAR_Mask;
-	/* Configure the USART Word Length, Parity and mode ----------------------- */
-	/* Set the M bits according to USART_WordLength value */
-	/* Set PCE and PS bits according to USART_Parity value */
-	/* Set TE and RE bits according to USART_Mode value */
-	tmpreg |= (uint32_t) USART_InitStruct->USART_WordLength
-			| USART_InitStruct->USART_Parity | USART_InitStruct->USART_Mode;
-	/* Write to USART CR1 */
-	USARTx->CR1 = (uint16_t) tmpreg;
-
-	/*---------------------------- USART CR3 Configuration -----------------------*/
-	tmpreg = USARTx->CR3;
-	/* Clear CTSE and RTSE bits */
-	tmpreg &= CR3_CLEAR_Mask;
-	/* Configure the USART HFC -------------------------------------------------*/
-	/* Set CTSE and RTSE bits according to USART_HardwareFlowControl value */
-	tmpreg |= USART_InitStruct->USART_HardwareFlowControl;
-	/* Write to USART CR3 */
-	USARTx->CR3 = (uint16_t) tmpreg;
-
-	/*---------------------------- USART BRR Configuration -----------------------*/
-	/* Configure the USART Baud Rate -------------------------------------------*/
-	RCC_GetClocksFreq(&RCC_ClocksStatus);
-	if (usartxbase == USART1_BASE)
-	{
-		apbclock = RCC_ClocksStatus.PCLK2_Frequency;
-	}
-	else
-	{
-		apbclock = RCC_ClocksStatus.PCLK1_Frequency;
-	}
-
-	/* Integer part computing in case Oversampling mode is 16 Samples */
-	integerdivider =
-			((25 * apbclock) / (4 * (USART_InitStruct->USART_BaudRate)));
-	tmpreg = (integerdivider / 100) << 4;
-
-	/* Determine the fractional part */
-	fractionaldivider = integerdivider - (100 * (tmpreg >> 4));
-
-	/* Implement the fractional part in the register */
-	tmpreg |= ((((fractionaldivider * 16) + 50/*当超过0.5的时候将进一来确保波特率符合错误虑见到最少*/)
-			/ 100)) & ((uint8_t) 0x0F);
-
-	/* Write to USART BRR */
-	USARTx->BRR = (uint16_t) tmpreg;
-}
-
-void USART_Configuration(USART_TypeDef *USARTx)
-{
-	USART_InitTypeDef USART_InitStructure;
-	USART_DeInit(USARTx);
-//使能串口、串口所用的I/O口以及端口复用时钟
-	RCC_APB2PeriphClockCmd(
-			RCC_APB2Periph_GPIOA | RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,
-			ENABLE);
-	/* A9 USART1_Tx */
-	set_io(GPIOA, GPIO_Mode_AF_PP, GPIO_Pin_9, GPIO_Speed_2MHz); //推挽输出-TX
-			/* A10 USART1_Rx */
-	set_io(GPIOA, GPIO_Mode_AF_PP, GPIO_Pin_10, GPIO_Mode_IN_FLOATING); //浮空输入-RX
-
-	USART_InitStructure.USART_BaudRate = 115200;
-	USART_InitStructure.USART_WordLength = USART_DATA_BIT_8;
-	USART_InitStructure.USART_StopBits = USART_STOP_BIT_1_0;
-	USART_InitStructure.USART_Parity = USART_Parity_No;
-	USART_InitStructure.USART_HardwareFlowControl =
-			USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = EN_USART_TX | EN_USART_RX ;
-	USART_Init(USART1, &USART_InitStructure);
-	/* Enable the USARTx */
-	USART_ENABLE(USARTx);
-
-}
-/**
-  * @brief 配置串口的中断
-  * @param USARTx: 要配置的串口\n
-  * 	 这个参数可以取得到以下的值：\n
-  * 	 @arg USART1 串口1
-  * 	 @arg USART2 串口2
-  * 	 @arg USART3 串口3
-  * @param flags: 要配置的串口中断源。\n
-  * 	 这个参数可以取得到以下的值：\n
-  * 	 @arg USART_FLAG_PE_INT 使能奇偶矫正中断
-  * 	 @arg USART_FLAG_TXE_INT 当TXR空时中断
-  * 	 @arg USART_FLAG_TC_INT 当发送完后中断
-  * 	 @arg USART_FLAG_RXNE_INT 当接受完后中断
-  * 	 @arg USART_FLAG_IDLE_INT 当挂起时中断
-  * 	 @arg USART_FLAG_ALL_INT 所有中断源打开
-  * @param NewState: 函数的运行状态\n
-  * 	 这个参数可以取得到以下的值：\n
-  * 	 @arg DISABLE 关闭指定的串口中断源
-  * 	 @arg ENABLE 打开指定的串口中断源
-  * @retval none
-  * \date 2012-5-9 上午10:41:19
-  * @note 如果需要开多的中断，则可以将上面标志或起来，或者加起来，USART_FLAG_INT_ALL是所有标志位的总和。\n
-  * 如果要除能多个中断源，方面跟使能的一样。
+  * @����  ��� USART_InitStruct ��ָ���Ĳ����ʼ������ USARTx �Ĵ���.
+  * @����  USARTx: ѡ�� USART ��Χ�豸. 
+  *                ���������ȡ����ֵ֮һ: USART1, USART2, USART3, UART4 �� UART5.
+  * @����  USART_InitStruct: ָ��ṹ USART_InitTypeDef ��ָ�룬�������� USART ��������Ϣ.
+  * @����  û��
   */
-void USARTx_IT_Configure(USART_TypeDef *USARTx, uint16_t flags ,FunctionalState NewState)
+uint32_t USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
 {
-	if (NewState == ENABLE)
-	{
-		USARTx->CR1 |= flags;
-	}
-	else
-	{
-		USARTx->CR1 &= ~flags;
-	}
-}
+  uint32_t tmpreg = 0x00, apbclock = 0x00;
+  uint32_t integerdivider = 0x00;
+  uint32_t fractionaldivider = 0x00;
+  uint32_t usartxbase = 0;
+  RCC_ClocksTypeDef RCC_ClocksStatus;
+  /* The hardware flow control is available only for USART1, USART2 and USART3 */
+  usartxbase = (uint32_t)USARTx;
 
-/**y
- * @brief  Checks whether the specified USART flag is set or not.
- * @param  USARTx: Select the USART or the UART peripheral.
- *   This parameter can be one of the following values:
- *   USART1, USART2, USART3, UART4 or UART5.
- * @param  USART_FLAG: specifies the flag to check.
- *   This parameter can be one of the following values:
- *     @arg USART_FLAG_CTS:  CTS Change flag (not available for UART4 and UART5)
- *     @arg USART_FLAG_LBD:  LIN Break detection flag
- *     @arg USART_FLAG_TXE:  Transmit data register empty flag
- *     @arg USART_FLAG_TC:   Transmission Complete flag
- *     @arg USART_FLAG_RXNE: Receive data register not empty flag
- *     @arg USART_FLAG_IDLE: Idle Line detection flag
- *     @arg USART_FLAG_ORE:  OverRun Error flag
- *     @arg USART_FLAG_NE:   Noise Error flag
- *     @arg USART_FLAG_FE:   Framing Error flag
- *     @arg USART_FLAG_PE:   Parity Error flag
- * @retval The new state of USART_FLAG (SET or RESET).
- */
+/*---------------------------- USART CR2 Configuration -----------------------*/
+  tmpreg = USARTx->CR2;
+  /* ��� STOP[13:12] λ */
+  tmpreg &= CR2_STOP_CLEAR_Mask;
+  /* ���� USART ����λ, ʱ��, ʱ�Ӽ���, ʱ����λ �� ĩλ ------------*/
+  /* ���� STOP[13:12] λ������ USART_StopBits ��ֵ */
+  tmpreg |= (uint32_t)USART_InitStruct->USART_StopBits;
+  
+  /* д USART CR2 */
+  USARTx->CR2 = (uint16_t)tmpreg;
+
+/*---------------------------- USART CR1 Configuration -----------------------*/
+  tmpreg = USARTx->CR1;
+  /* ��� M, PCE, PS, TE �� RE λ */
+  tmpreg &= CR1_CLEAR_Mask;
+  /* ���� USART �ֳ�, ��ż �� ģʽ ----------------------- */
+  /* ���� M   λ������ USART_WordLength ��ֵ */
+  /* ���� PCE �� PS λ������ USART_Parity ��ֵ */
+  /* ���� TE  �� RE λ������ USART_Mode ��ֵ */
+  tmpreg |= (uint32_t)USART_InitStruct->USART_WordLength | USART_InitStruct->USART_Parity |
+            USART_InitStruct->USART_Mode;
+  /* д USART CR1 */
+  USARTx->CR1 = (uint16_t)tmpreg;
+
+/*---------------------------- USART CR3 Configuration -----------------------*/  
+  tmpreg = USARTx->CR3;
+  /* ��� CTSE �� RTSE λ */
+  tmpreg &= CR3_CLEAR_Mask;
+  /* ���� USART HFC -------------------------------------------------*/
+  /* ���� CTSE �� RTSE λ������ USART_HardwareFlowControl ��ֵ */
+  tmpreg |= USART_InitStruct->USART_HardwareFlowControl;
+  /* д USART CR3 */
+  USARTx->CR3 = (uint16_t)tmpreg;
+
+/*---------------------------- USART BRR Configuration -----------------------*/
+  /* ���� USART ������ -------------------------------------------*/
+  RCC_GetClocksFreq(&RCC_ClocksStatus);
+  if (usartxbase == USART1_BASE)
+  {
+    apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+  }
+  else
+  {
+    apbclock = RCC_ClocksStatus.PCLK1_Frequency;
+  }
+  /* ȷ������� */
+  integerdivider = ((0x19 * apbclock) / (0x04 * (USART_InitStruct->USART_BaudRate)));
+  tmpreg = (integerdivider / 0x64) << 0x04;
+  /* ȷ������� */
+  fractionaldivider = integerdivider - (0x64 * (tmpreg >> 0x04));
+  tmpreg |= ((((fractionaldivider * 0x10) + 0x32) / 0x64)) & ((uint8_t)0x0F);
+  /* д USART BRR */
+  USARTx->BRR = (uint16_t)tmpreg;
+	return apbclock;
+}
+/**
+  * @brief  Transmits single data through the USARTx peripheral.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *   USART1, USART2, USART3, UART4 or UART5.
+  * @param  Data: the data to transmit.
+  * @retval None
+  */
+void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
+{    
+	  /* Transmit Data */
+  while (!(USARTx->SR & USART_FLAG_TXE));
+  USARTx->DR = (Data & (uint16_t)0x01FF);
+}
+/**
+  * @brief  Checks whether the specified USART flag is set or not.
+  * @param  USARTx: Select the USART or the UART peripheral.
+  *   This parameter can be one of the following values:
+  *   USART1, USART2, USART3, UART4 or UART5.
+  * @param  USART_FLAG: specifies the flag to check.
+  *   This parameter can be one of the following values:
+  *     @arg USART_FLAG_CTS:  CTS Change flag (not available for UART4 and UART5)
+  *     @arg USART_FLAG_LBD:  LIN Break detection flag
+  *     @arg USART_FLAG_TXE:  Transmit data register empty flag
+  *     @arg USART_FLAG_TC:   Transmission Complete flag
+  *     @arg USART_FLAG_RXNE: Receive data register not empty flag
+  *     @arg USART_FLAG_IDLE: Idle Line detection flag
+  *     @arg USART_FLAG_ORE:  OverRun Error flag
+  *     @arg USART_FLAG_NE:   Noise Error flag
+  *     @arg USART_FLAG_FE:   Framing Error flag
+  *     @arg USART_FLAG_PE:   Parity Error flag
+  * @retval The new state of USART_FLAG (SET or RESET).
+  */
 FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG)
 {
-	FlagStatus bitstatus = RESET;
-	/* The CTS flag is not available for UART4 and UART5 */
+  FlagStatus bitstatus = RESET;
+  /* Check the parameters */
+  //assert_param(IS_USART_ALL_PERIPH(USARTx));
+  //assert_param(IS_USART_FLAG(USART_FLAG));
+  /* The CTS flag is not available for UART4 and UART5 */
+  if (USART_FLAG == USART_FLAG_CTS)
+  {
+    //assert_param(IS_USART_123_PERIPH(USARTx));
+  }
 
-	if ((USARTx->SR & USART_FLAG) != (uint16_t) RESET)
-	{
-		bitstatus = SET;
-	}
-	else
-	{
-		bitstatus = RESET;
-	}
-	return bitstatus;
+  if ((USARTx->SR & USART_FLAG) != (uint16_t)RESET)
+  {
+    bitstatus = SET;
+  }
+  else
+  {
+    bitstatus = RESET;
+  }
+  return bitstatus;
 }
-/**
- * @brief  Transmits single data through the USARTx peripheral.
- * @param  USARTx: Select the USART or the UART peripheral.
- *   This parameter can be one of the following values:
- *   USART1, USART2, USART3, UART4 or UART5.
- * @param  Data: the data to transmit.
- * @retval None
- */
-void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
-{
-
-	/* Transmit Data */
-	USARTx->DR = (Data & (uint16_t) 0x01FF);
-}
-/**
- * @brief  Returns the most recent received data by the USARTx peripheral.
- * @param  USARTx: Select the USART or the UART peripheral.
- *   This parameter can be one of the following values:
- *   USART1, USART2, USART3, UART4 or UART5.
- * @retval The received data.
- */
-uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
-{
-	/* Receive Data */
-	return (uint16_t) (USARTx->DR & (uint16_t) 0x01FF);
-}
-

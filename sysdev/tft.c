@@ -1,95 +1,126 @@
-/**
- *  \file       tft.c
- *  \brief
- *
- *  \author     fulong\n
- *  Mail:fulong.mo@gmail.com\n
- *  \version:   1.0\n
- *  compiler:GCC\n
- *  \date       2012-5-3 下午3:03:54
- */
 #include "tft.h"
 #include "gpio.h"
 #include "rcc.h"
+#include "fsmc.h"
+#include "ssd1963.h"
 
-#define LCD_PORT                GPIOC
-#define LCD_CS_SET              LCD_PORT->BSRR=1<<9    //片选端口               PC9
-#define LCD_RS_SET              LCD_PORT->BSRR=1<<8    //数据/命令          PC8
-#define LCD_WR_SET              LCD_PORT->BSRR=1<<7    //写数据                        PC7
-#define LCD_RD_SET              LCD_PORT->BSRR=1<<6    //读数据                        PC6
-#define LCD_CS_CLR              LCD_PORT->BRR=1<<9     //片选端口               PC9
-#define LCD_RS_CLR              LCD_PORT->BRR=1<<8     //数据/命令          PC8
-#define LCD_WR_CLR              LCD_PORT->BRR=1<<7     //写数据                        PC7
-#define LCD_RD_CLR              LCD_PORT->BRR=1<<6     //读数据                        PC6
-//PB0~15,作为数据线
-#define DATAOUT(x) GPIOB->ODR=x; //数据输出
-#define DATAIN     GPIOB->IDR;   //数据输入
-/** @brief 对寄存器进行写入data这个数据*/
-#define LCD_WR_DATA(data){\
-LCD_RS_SET;\
-LCD_CS_CLR;\
-DATAOUT(data);\
-LCD_WR_CLR;\
-LCD_WR_SET;\
-LCD_CS_SET;\
-}/*!< 对寄存器进行写入data这个数据 */
+#if TFT_CONTROL_WAY == TFT_FSMC && CPU_TYPE == STM32F103VE
 /**
- * @brief 寄存器寻址
- * @param data: 写入的ir中的寄存器地址（index register）
- * @retval none
- * \date 2012-5-4 下午6:08:03
- * @note
- */
-void LCD_WR_REG(u8 data)
-{
-
-	LCD_RS_CLR; //写地址
-	LCD_CS_CLR;
-	DATAOUT(data);
-	LCD_WR_CLR;
-	LCD_WR_SET;
-	LCD_CS_SET;
-}
-/**
- * @brief  写寄存器
- * @param  LCD_Reg: 要寻址的寄存器
- * @param  LCD_RegValue: 写入这个寄存器的值
- * @retval none
- * \date 2012-5-4 下午5:57:33
- * @note
- */
-void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
-{
-	LCD_WR_REG(LCD_Reg);
-	LCD_WR_DATA(LCD_RegValue);
-}
-
-#define LCD_RD                  GPIO_Pin_6
-#define LCD_WR                  GPIO_Pin_7
-#define LCD_RS                  GPIO_Pin_8
-#define LCD_CS                  GPIO_Pin_9
-#define LCD_BL                  GPIO_Pin_10
-
-/**
- * @brief  tft屏的端口配置与初始化
+ * @brief  FSMC引脚配置
  * @param  none
+ *  这个参数可以取得到以下的值：\n
+ *  	@arg
  * @retval none
- * \date 2012-5-3 下午3:07:32
+ * \date May 22, 2012 1:46:13 PM
  * @note
  */
-void tft_init(void)
-{
-	//使能串口、串口所用的I/O口以及端口复用时钟
-	RCC_APB2PeriphClockCmd(
-			RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO,
-			ENABLE);
-	JTAG_Set(SWD_ENABLE); //开启SWD
-	/*配置lcd功能口*/
-	set_io(GPIOC, GPIO_Mode_AF_PP, (LCD_RD | LCD_WR | LCD_RS | LCD_CS | LCD_BL),
-			GPIO_Speed_50MHz);
-	GPIOC->ODR |= 0X07C0;
-	//PORTB 推挽输出，LCD DATA口配置
-	set_io(GPIOB, GPIO_Mode_AF_PP, GPIO_Pin_All, GPIO_Speed_50MHz);
-	GPIOB->ODR |= 0XFFFF;
-}
 
+void FSMC_GPIO_Configuration(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
+
+	RCC_APB2PeriphClockCmd(
+			RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOE | RCC_APB2Periph_AFIO,
+			ENABLE); /* 使能各个端口时钟，重要！！！*/
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_4
+			| GPIO_Pin_5 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10
+			| GPIO_Pin_11 | GPIO_Pin_14 | GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9
+			| GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13
+			| GPIO_Pin_14 | GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
+}
+/**
+ * @brief  FSMC 配置使用FSMC的BANK1 NOR/PSRAM
+ * @param  none
+ *  这个参数可以取得到以下的值：\n
+ *  	@arg
+ * @retval none
+ * \date May 22, 2012 1:47:38 PM
+ * @note
+ */
+
+void FSMC_LCD_Init(void)
+{
+	FSMC_NORSRAMInitTypeDef FSMC_NORSRAMInitStructure;
+	FSMC_NORSRAMTimingInitTypeDef p;
+
+	/* Configure FSMC Bank1 NOR/PSRAM */
+
+	p.FSMC_AddressSetupTime = 0x02;
+	p.FSMC_AddressHoldTime = 0x00;
+	p.FSMC_DataSetupTime = 0x05;
+	p.FSMC_BusTurnAroundDuration = 0x00;
+	p.FSMC_CLKDivision = 0x00;
+	p.FSMC_DataLatency = 0x00;
+	p.FSMC_AccessMode = FSMC_AccessMode_B;
+
+	FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;
+	FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_NOR;
+	FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
+	FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode =
+			FSMC_BurstAccessMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity =
+			FSMC_WaitSignalPolarity_Low;
+	FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive =
+			FSMC_WaitSignalActive_BeforeWaitState;
+	FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+	FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &p;
+	FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &p;
+
+	FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+
+	/* Enable FSMC Bank1_SRAM Bank */
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
+}
+#else
+/**
+  * @brief  这个函数是用来拓展用的，但用的是其他芯片或其他方式驱动TFT的时候，可将这函数拓展具体一点
+  * @param  none
+  *  这个参数可以取得到以下的值：\n
+  *  	@arg
+  * @retval none
+  * \date May 22, 2012 3:14:54 PM
+  * @note
+  */
+void something_about_tft_inited_by_another_way(void)
+{
+}
+#endif
+/**
+ * @brief  LCD初始化
+ * @param  none
+ *  这个参数可以取得到以下的值：\n
+ *  	@arg
+ * @retval none
+ * \date May 22, 2012 1:44:58 PM
+ * @note
+ */
+void LCD_Init(void)
+{
+#if TFT_CONTROL_WAY == TFT_FSMC && CPU_TYPE == STM32F103VE
+	FSMC_GPIO_Configuration();
+	FSMC_LCD_Init();
+#else
+	something_about_tft_inited_by_another_way();
+#endif
+#ifdef SSD1963_DEVICE
+	ssd1936_init();
+#else
+	other_device_init();//这个函数实际不存在，也是拓展用的，如果使用其他芯片的时候，这个就是那个芯片的初始化程序
+#endif
+}

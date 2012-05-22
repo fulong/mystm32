@@ -16,7 +16,6 @@
 #define INCLUDE_H_
 
 #include "../../package/usart_package.h"
-#include "../../package/time_package.h"
 
 
 #endif /* INCLUDE_H_ */

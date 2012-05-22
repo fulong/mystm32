@@ -1,36 +1,13 @@
-/*
- *  File name: 		touch.c
+/**
+ *  \file	touch.c
+ *  \brief      
  *
- *  Created on: 	…œŒÁ11:53:51 2012-4-20 2012 
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-
- */
-#include "touch.h"
-
-//---------------------------------------------------------
-/*
- Function Name:
- ver 1.0
- first creat:			…œŒÁ11:54:37  2012-4-20
- final alternative:
- Parameters:
- In: 		None.
- Out: 		None.
- In/Out: 	None.
- Return Values: 	None.
- Comments:
+ *  \author 	fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version: 	1.0\n
+ *  compiler:GCC\n
+ *  \date       2012-5-21 ‰∏ãÂçà5:24:41
  */
 
-// Function body
-void
-touch_init()
-{
-}
 
-// End Function Name
-//---------------------------------------------------------
+

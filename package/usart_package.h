@@ -1,22 +1,10 @@
-/**
- *  \file       usart_package.h
- *  \brief      对usart子函数打包成所需要的功能函数供main函数使用
- *
- *  \author     fulong\n
- *  Mail:fulong.mo@gmail.com\n
- *  \version:   1.0\n
- *  compiler:GCC\n
- *  \date      Apr 23, 2012 6:06:29 PM
- */
+#ifndef __USART_PACKAGE_H__
+#define __USART_PACKAGE_H__
 
-#ifndef DEBUG_H_
-#define DEBUG_H_
-#include "../sysdev/usart.h"
-#include "../libc/string.h"
+#include "../libc/cpu_typed.h"
 
-INT8U USART_length;/*!< 串口中断发送的字符串长度 */
+#define __DEBUG__
+extern void printfs(const INT8S* data);
+extern void printf_num(INT32U,INT8U);
 
-extern void printfs(INT8 * str);/*!< 利用串口打印一字符串 */
-extern INT32U printfs_int(INT8 * str);/*!< 串口中断开启后利用串口打印一字符串 */
-
-#endif /* DEBUG_H_ */
+#endif

@@ -1,42 +1,26 @@
-/*
- *  File name: 		systick.c
- *
- *  Created on: 	����11:09:12 2012-4-20 2012 
- *  Author: 		fulong
- *  Version: 		1.0
- *  Compiler: 		GCC
- *  Language: 		C/C++
- *  Mail:		fulong.mo@gmail.com
- *  Comment:
-
- */
-
 #include "systick.h"
-//---------------------------------------------------------
-/*
- Function Name:                 systick_init
- ver 1.0
- first creat:			����11:19:04  2012-4-20
- final alternative:
- Parameters:
- In: 		                None.
- Out: 		                None.
- In/Out: 	                None.
- Return Values:		        None.
- Comments: 			��ʼ��systickʱ�ӣ�10ms����һ���ж�
+/**
+ *  \file	systick.c
+ *  \brief      
+ *
+ *  \author 	fulong\n
+ *  Mail:fulong.mo@gmail.com\n
+ *  \version: 	1.0\n
+ *  compiler:GCC\n
+ *  \date       May 22, 2012 1:53:37 PM
  */
 
-// Function body
-#define HCLK 72//MHz
 #define FCLK 72//MHz
-#if SYSTICK_INT != 1
+#define HCLK 72//MHz
+#ifndef SYSTICK_INT
 INT32U delayUs;
 INT32U delayMs;
 #endif
 
+
 void systick_init(void)
 {
-#if SYSTICK_INT == 1
+#ifdef SYSTICK_INT
 	SysTick->CTRL &= 0xfffffff8; //bit2���,ѡ���ⲿʱ��  HCLK/8
 	SysTick->LOAD = (u32) ((HCLK / 8) * 1000 * 10); //ʱ�����(SysTick->LOADΪ24bit)
 	SysTick->VAL = 0x00; //��ռ�����
@@ -46,10 +30,7 @@ void systick_init(void)
 	delayMs = delayUs * 1000;
 #endif
 }
-
-// End Function Name
-//---------------------------------------------------------
-#if SYSTICK_INT != 1
+#ifndef SYSTICK_INT
 /**
   * @brief  延时ms函数
   * @param  ms: 延时ms个单位

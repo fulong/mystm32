@@ -30,7 +30,7 @@
                            disbuf，是间接地返回参数，可以看为返回转换后的字符串数组。
   */
 
-math_status oct_transfer(uint32 disnum,uint8* disbuf,const uint32 hex_or_bin)
+math_status oct_transfer(uint32 disnum,INT8S* disbuf,const uint32 hex_or_bin)
 {
   uint8 num_char[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
   uint8 buf1[32];                       //暂存栈区

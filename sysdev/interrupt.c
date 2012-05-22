@@ -89,7 +89,7 @@ void nvic_group(u8 NVIC_PreemptionPriority, u8 NVIC_SubPriority,
  */
 void NVIC_Init(void)
 {
-	interrupt_open();
+//	interrupt_open();
 	nvic_group(3, 3, USART1_IRQn, 2); //组2，最低优先级
 }
 /**
@@ -101,7 +101,7 @@ void NVIC_Init(void)
  * \date 2012-5-14 下午3:19:18
  * @note SYSTICK_INT宏来控制这个函数的状态。1，代表使用中断。否则，则不便宜
  */
-#if SYSTICK_INT == 1
+#ifdef SYSTICK_INT
 volatile INT32U counter = 0;
 static BOOLEAN led_glitter = 0;
 #endif
@@ -140,25 +140,5 @@ void systick_Handle(void)
  */
 void USART1_Handler(void)
 {
-	if ((USART_GetFlagStatus(USART1, USART_FLAG_TXE) == SET))
-	{
-
-		USART1->SR &= (~USART_FLAG_TC);
-		if (USART_length != 0)
-		{
-			USART_SendData(USART1, *TX_buf_bp++);
-			USART_length--;
-		}
-		else //(length == 0)
-		{ //字符串发送完毕，发送缓冲区指针复位
-			TX_buf_bp = TX_buf;
-			USARTx_IT_Configure(USART1, USART_FLAG_TXE_INT, DISABLE);
-		}
-	}
-//	if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
-//	{
-//		while (1)
-//			;
-//	}
 }
 
