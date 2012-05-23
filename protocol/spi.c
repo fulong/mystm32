@@ -11,5 +11,6 @@
 
 void spi_io_configure(void)
 {
-	GPIO_InitTypeDef GPIO_init;
+	GPIO_InitTypeDef GPIO_InitStructure;
+
 }

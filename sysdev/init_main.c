@@ -8,7 +8,7 @@
  *  compiler:GCC\n
  *  \date       2012-5-21 下午5:25:11
  */
-#include "ssd1963.h"
+#include "../chip/ssd1963.h"
 #include "tft.h"
 #include "systick.h"
 #include "rcc.h"

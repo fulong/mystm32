@@ -2,7 +2,7 @@
 #include "gpio.h"
 #include "rcc.h"
 #include "fsmc.h"
-#include "ssd1963.h"
+#include "../chip/ssd1963.h"
 
 #if TFT_CONTROL_WAY == TFT_FSMC && CPU_TYPE == STM32F103VE
 /**

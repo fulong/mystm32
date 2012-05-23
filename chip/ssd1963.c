@@ -37,7 +37,7 @@ void set_orgin(INT16U x, INT16U y)
 	INT16U x_low;
 	INT16U y_high;
 	INT16U y_low;
-	INT16U *image_temp = (INT16U *) gImage_image;
+	INT16U *image_temp = (INT16U *)gImage_image ;
 	x_high = (((x - 1) >> 8) & 0xFF);
 	x_low = ((x - 1) & 0xFF);
 	y_high = (((y - 1) >> 8) & 0xFF);
